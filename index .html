@@ -1,0 +1,2493 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бұлттық Технологиялар — Толық Курс</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #0ea5e9;
+    --sky-deep: #0369a1;
+    --sky-light: #e0f2fe;
+    --cloud: #f0f9ff;
+    --night: #0c1a2e;
+    --night2: #102540;
+    --accent: #38bdf8;
+    --accent2: #06b6d4;
+    --gold: #fbbf24;
+    --green: #22d3ee;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #cbd5e1;
+    --white: #ffffff;
+    --radius: 16px;
+    --shadow: 0 8px 32px rgba(14,165,233,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cloud);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(12,26,46,0.97);
+    backdrop-filter: blur(16px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px;
+    border-bottom: 1px solid rgba(56,189,248,0.15);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem;
+    color: var(--accent); letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;
+    cursor: pointer;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 6px; }
+  .nav-links a {
+    color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem;
+    padding: 6px 14px; border-radius: 8px; transition: all 0.2s;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: var(--accent); background: rgba(56,189,248,0.1); }
+  .nav-btn {
+    background: var(--sky); color: white; border: none; padding: 8px 20px;
+    border-radius: 8px; font-family: 'DM Sans',sans-serif; font-weight: 600;
+    font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+  }
+  .nav-btn:hover { background: var(--sky-deep); transform: translateY(-1px); }
+
+  /* ===== PAGES ===== */
+  .page { display: none; min-height: 100vh; padding-top: 64px; }
+  .page.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ===== HERO ===== */
+  #home {
+    background: linear-gradient(135deg, var(--night) 0%, var(--night2) 60%, #0c2d4a 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(14,165,233,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 10% 80%, rgba(6,182,212,0.12) 0%, transparent 60%);
+  }
+  .clouds-anim {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; overflow: hidden;
+  }
+  .cloud-el {
+    position: absolute; border-radius: 50px;
+    background: rgba(255,255,255,0.04);
+    animation: drift linear infinite;
+  }
+  .cloud-el:nth-child(1) { width:200px; height:60px; top:15%; left:-220px; animation-duration:28s; animation-delay:0s; }
+  .cloud-el:nth-child(2) { width:140px; height:45px; top:35%; left:-160px; animation-duration:22s; animation-delay:5s; }
+  .cloud-el:nth-child(3) { width:280px; height:70px; top:55%; left:-300px; animation-duration:35s; animation-delay:10s; }
+  .cloud-el:nth-child(4) { width:110px; height:35px; top:70%; left:-130px; animation-duration:20s; animation-delay:2s; }
+  @keyframes drift { from { transform: translateX(0); } to { transform: translateX(110vw); } }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 40px 60px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3);
+    color: var(--accent); padding: 6px 16px; border-radius: 40px;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  .hero-title {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.1;
+    color: var(--white); margin-bottom: 20px; letter-spacing: -1px;
+  }
+  .hero-title em { color: var(--accent); font-style: normal; }
+  .hero-desc { color: rgba(255,255,255,0.65); font-size: 1.05rem; line-height: 1.7; margin-bottom: 36px; }
+  .hero-stats { display: flex; gap: 32px; margin-bottom: 40px; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Syne',sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--accent); }
+  .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px; }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--sky); color: white; border: none;
+    padding: 14px 28px; border-radius: 12px; font-family:'DM Sans',sans-serif;
+    font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--sky-deep); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,165,233,0.4); }
+  .btn-outline {
+    background: transparent; color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 14px 28px; border-radius: 12px; font-family:'DM Sans',sans-serif;
+    font-weight: 500; font-size: 1rem; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(56,189,248,0.08); }
+
+  .hero-visual {
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .cloud-diagram {
+    width: 100%; max-width: 420px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(56,189,248,0.2);
+    border-radius: 24px; padding: 32px; position: relative;
+  }
+  .cd-center {
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+    border-radius: 50%; width: 90px; height: 90px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px; font-size: 2.4rem;
+    box-shadow: 0 0 40px rgba(14,165,233,0.5);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 30px rgba(14,165,233,0.4);} 50%{box-shadow:0 0 60px rgba(14,165,233,0.7);} }
+  .cd-nodes { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .cd-node {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 12px 8px; text-align: center;
+    font-size: 0.72rem; color: rgba(255,255,255,0.7); font-weight: 500;
+    transition: all 0.2s; cursor: default;
+  }
+  .cd-node:hover { background: rgba(56,189,248,0.12); border-color: var(--accent); color: var(--accent); }
+  .cd-node .icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+
+  /* ===== SECTIONS ===== */
+  .section { max-width: 1100px; margin: 0 auto; padding: 60px 40px; }
+  .section-header { text-align: center; margin-bottom: 48px; }
+  .section-tag {
+    display: inline-block; background: var(--sky-light); color: var(--sky-deep);
+    padding: 4px 14px; border-radius: 40px; font-size: 0.78rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--night); letter-spacing: -0.5px;
+  }
+  .section-desc { color: var(--muted); font-size: 1rem; margin-top: 10px; max-width: 560px; margin-left: auto; margin-right: auto; }
+
+  /* ===== CARDS ===== */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 20px; }
+  .card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px; cursor: pointer;
+    transition: all 0.25s; position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--sky), var(--accent2));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: rgba(14,165,233,0.3); }
+  .card:hover::before { transform: scaleX(1); }
+  .card-num {
+    font-family: 'Syne',sans-serif; font-weight: 800; font-size: 2rem;
+    color: var(--sky-light); margin-bottom: 4px;
+  }
+  .card-icon { font-size: 1.8rem; margin-bottom: 12px; }
+  .card-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 6px;
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.3px; margin-bottom: 10px;
+  }
+  .tag-lecture { background: #dbeafe; color: #1d4ed8; }
+  .tag-seminar { background: #dcfce7; color: #15803d; }
+  .tag-test { background: #fef3c7; color: #92400e; }
+  .tag-video { background: #fce7f3; color: #9d174d; }
+  .card-title {
+    font-family: 'Syne',sans-serif; font-weight: 700; font-size: 1rem;
+    color: var(--night); margin-bottom: 8px; line-height: 1.4;
+  }
+  .card-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .card-duration { font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+  .card-arrow {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--sky-light); color: var(--sky-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; transition: all 0.2s;
+  }
+  .card:hover .card-arrow { background: var(--sky); color: white; }
+
+  /* ===== TABS ===== */
+  .tabs { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+  .tab {
+    padding: 8px 20px; border-radius: 10px; border: 1px solid var(--border);
+    background: white; color: var(--muted); font-weight: 500; font-size: 0.88rem;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .tab.active, .tab:hover { background: var(--sky); color: white; border-color: var(--sky); }
+
+  /* ===== DETAIL PAGE ===== */
+  #detail-page {
+    background: var(--cloud);
+  }
+  .detail-hero {
+    background: linear-gradient(135deg, var(--night) 0%, var(--night2) 100%);
+    padding: 60px 40px 50px;
+  }
+  .detail-hero-inner { max-width: 900px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08);
+    border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;
+    font-family:'DM Sans',sans-serif; font-size: 0.85rem; margin-bottom: 28px;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { color: white; background: rgba(255,255,255,0.14); }
+  .detail-type-tag {
+    display: inline-block; padding: 4px 14px; border-radius: 40px;
+    font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 14px;
+  }
+  .detail-title {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(1.6rem,3vw,2.4rem); color: white; margin-bottom: 14px; letter-spacing: -0.5px;
+  }
+  .detail-meta { display: flex; gap: 20px; flex-wrap: wrap; }
+  .detail-meta span { color: rgba(255,255,255,0.55); font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
+
+  .detail-body { max-width: 900px; margin: 0 auto; padding: 40px 40px 60px; }
+  .detail-card {
+    background: white; border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 32px; margin-bottom: 24px;
+  }
+  .detail-card h2 {
+    font-family:'Syne',sans-serif; font-weight: 700; font-size: 1.2rem;
+    color: var(--night); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .detail-card p { color: var(--muted); line-height: 1.75; margin-bottom: 12px; font-size: 0.95rem; }
+  .detail-card ul { list-style: none; }
+  .detail-card ul li {
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 0.9rem; display: flex; align-items: flex-start; gap: 10px;
+  }
+  .detail-card ul li:last-child { border-bottom: none; }
+  .detail-card ul li::before { content: '→'; color: var(--sky); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* VIDEO EMBED */
+  .video-wrap {
+    background: var(--night); border-radius: 14px; overflow: hidden;
+    aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;
+    position: relative; cursor: pointer; margin-bottom: 16px;
+  }
+  .video-thumb {
+    position: absolute; inset: 0; background: linear-gradient(135deg, #0c2d4a, #0ea5e9);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  }
+  .play-btn {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; transition: all 0.2s;
+  }
+  .video-wrap:hover .play-btn { background: var(--sky); border-color: var(--sky); transform: scale(1.1); }
+  .video-label { color: rgba(255,255,255,0.7); font-size: 0.9rem; font-weight: 500; }
+
+  .video-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .video-item {
+    background: var(--night); border-radius: 12px; overflow: hidden; cursor: pointer;
+    transition: all 0.2s; border: 1px solid rgba(255,255,255,0.08);
+  }
+  .video-item:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .vi-thumb {
+    aspect-ratio: 16/9; background: linear-gradient(135deg, #0c2d4a 0%, #0369a1 100%);
+    display: flex; align-items: center; justify-content: center; font-size: 2rem;
+    position: relative;
+  }
+  .vi-badge {
+    position: absolute; bottom: 6px; right: 8px;
+    background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem;
+    padding: 2px 7px; border-radius: 4px;
+  }
+  .vi-info { padding: 12px; }
+  .vi-title { color: white; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+  .vi-meta { color: rgba(255,255,255,0.45); font-size: 0.75rem; }
+
+  /* TEST */
+  .quiz-container { }
+  .quiz-progress { margin-bottom: 24px; }
+  .quiz-progress-bar { background: var(--border); border-radius: 4px; height: 6px; margin-top: 8px; }
+  .quiz-progress-fill { background: linear-gradient(90deg, var(--sky), var(--accent2)); height: 6px; border-radius: 4px; transition: width 0.4s; }
+  .quiz-q { font-family:'Syne',sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--night); margin-bottom: 20px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    background: var(--cloud); border: 2px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; cursor: pointer;
+    font-size: 0.92rem; color: var(--text); transition: all 0.2s;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .quiz-opt:hover { border-color: var(--sky); background: var(--sky-light); }
+  .quiz-opt.selected { border-color: var(--sky); background: var(--sky-light); color: var(--sky-deep); }
+  .quiz-opt.correct { border-color: #22c55e; background: #f0fdf4; color: #15803d; }
+  .quiz-opt.wrong { border-color: #ef4444; background: #fef2f2; color: #dc2626; }
+  .quiz-opt-letter {
+    width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+  }
+  .quiz-actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .quiz-result {
+    text-align: center; padding: 40px 20px;
+  }
+  .quiz-score {
+    font-family:'Syne',sans-serif; font-weight: 800; font-size: 3.5rem; color: var(--sky);
+    margin-bottom: 8px;
+  }
+  .quiz-result p { color: var(--muted); font-size: 1rem; margin-bottom: 24px; }
+
+  /* TASK */
+  .task-block {
+    background: linear-gradient(135deg, var(--sky-light), #f0f9ff);
+    border: 1px solid rgba(14,165,233,0.2); border-radius: 14px;
+    padding: 24px; margin-bottom: 16px;
+  }
+  .task-num {
+    font-family:'Syne',sans-serif; font-weight: 800; font-size: 0.8rem;
+    color: var(--sky-deep); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .task-title { font-weight: 700; font-size: 0.95rem; color: var(--night); margin-bottom: 8px; }
+  .task-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+  .task-input {
+    width: 100%; margin-top: 14px; padding: 12px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font-family:'DM Sans',sans-serif; font-size: 0.9rem; color: var(--text);
+    background: white; resize: vertical; min-height: 80px; transition: border-color 0.2s;
+  }
+  .task-input:focus { outline: none; border-color: var(--sky); }
+  .task-submit {
+    margin-top: 10px; padding: 9px 20px; background: var(--sky); color: white;
+    border: none; border-radius: 8px; cursor: pointer; font-family:'DM Sans',sans-serif;
+    font-weight: 600; font-size: 0.85rem; transition: all 0.2s;
+  }
+  .task-submit:hover { background: var(--sky-deep); }
+
+  /* PROGRESS BAR */
+  .course-progress {
+    background: white; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px; margin-bottom: 32px;
+  }
+  .cp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .cp-title { font-family:'Syne',sans-serif; font-weight: 700; font-size: 1rem; color: var(--night); }
+  .cp-pct { font-family:'Syne',sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--sky); }
+  .cp-bar { background: var(--border); border-radius: 6px; height: 10px; }
+  .cp-fill { background: linear-gradient(90deg, var(--sky), var(--accent2)); height: 10px; border-radius: 6px; width: 0%; transition: width 1s ease; }
+  .cp-labels { display: flex; justify-content: space-between; margin-top: 8px; }
+  .cp-labels span { font-size: 0.75rem; color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    background: var(--night); color: rgba(255,255,255,0.5);
+    text-align: center; padding: 32px 40px;
+    font-size: 0.82rem; margin-top: 60px;
+  }
+  footer strong { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media(max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-content { grid-template-columns: 1fr; gap: 40px; padding: 40px 20px; }
+    .hero-visual { display: none; }
+    .section { padding: 40px 20px; }
+    .detail-hero { padding: 40px 20px 36px; }
+    .detail-body { padding: 24px 20px 40px; }
+  }
+
+  /* SCROLL ANIMATIONS */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .revealed { opacity: 1; transform: translateY(0); }
+
+  /* TOOLTIP */
+  .tooltip { position: relative; display: inline-block; }
+  .tooltip .tip {
+    visibility: hidden; background: var(--night); color: white;
+    font-size: 0.75rem; padding: 4px 10px; border-radius: 6px;
+    position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+    white-space: nowrap; z-index: 99;
+  }
+  .tooltip:hover .tip { visibility: visible; }
+
+  /* SEARCH */
+  .search-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: white; border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 10px 18px; margin-bottom: 28px; max-width: 440px;
+  }
+  .search-bar input { border: none; outline: none; font-family:'DM Sans',sans-serif; font-size: 0.92rem; flex: 1; color: var(--text); }
+  .search-bar span { color: var(--muted); font-size: 1rem; }
+  .search-bar:focus-within { border-color: var(--sky); }
+
+
+  /* ===== AUTH ===== */
+  #auth-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, #061525 0%, #0a2540 60%, #0c1a2e 100%);
+    display: flex; align-items: center; justify-content: center;
+    overflow-y: auto; padding: 20px;
+  }
+  #auth-overlay.hidden { display: none !important; }
+
+  .auth-wrap {
+    width: 100%; max-width: 960px;
+    display: grid; grid-template-columns: 380px 1fr;
+    border-radius: 28px; overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(56,189,248,0.15);
+    animation: authIn 0.55s cubic-bezier(.22,.68,0,1.2);
+  }
+  @keyframes authIn { from{opacity:0;transform:translateY(32px) scale(0.97);}to{opacity:1;transform:none;} }
+
+  /* LEFT PANEL */
+  .auth-panel-left {
+    background: linear-gradient(160deg, #0c2d4a 0%, #0a1e35 100%);
+    padding: 48px 36px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; position: relative; overflow: hidden;
+    border-right: 1px solid rgba(56,189,248,0.12);
+  }
+  .auth-panel-left::before {
+    content:''; position:absolute; top:-80px; right:-80px;
+    width:260px; height:260px; border-radius:50%;
+    background: radial-gradient(circle, rgba(14,165,233,0.18) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .auth-panel-left::after {
+    content:''; position:absolute; bottom:-60px; left:-60px;
+    width:200px; height:200px; border-radius:50%;
+    background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .apl-photo-ring {
+    position:relative; z-index:1; margin-bottom:20px;
+  }
+  .apl-photo-ring img {
+    width:108px; height:108px; border-radius:50%; object-fit:cover; object-position:center 10%;
+    border:3px solid rgba(56,189,248,0.55);
+    box-shadow: 0 0 0 6px rgba(14,165,233,0.12), 0 8px 32px rgba(0,0,0,0.4);
+    display:block;
+  }
+  .apl-online {
+    position:absolute; bottom:4px; right:4px;
+    width:18px; height:18px; border-radius:50%;
+    background:#22c55e; border:2.5px solid #0a1e35;
+    box-shadow:0 0 8px rgba(34,197,94,0.6);
+  }
+  .apl-title {
+    font-family:'Syne',sans-serif; font-weight:800; font-size:1.45rem;
+    color:#fff; letter-spacing:-0.5px; line-height:1.25; margin-bottom:5px; z-index:1;
+  }
+  .apl-title em { color:var(--accent); font-style:normal; }
+  .apl-author { font-weight:700; font-size:0.92rem; color:rgba(255,255,255,0.88); margin-bottom:3px; z-index:1; }
+  .apl-uni { font-size:0.76rem; color:rgba(255,255,255,0.42); line-height:1.55; z-index:1; }
+  .apl-divider {
+    width:40px; height:2px; border-radius:2px;
+    background:linear-gradient(90deg,var(--sky),var(--accent2));
+    margin:18px auto; z-index:1;
+  }
+  .apl-stats { display:flex; gap:10px; z-index:1; }
+  .apl-stat {
+    background:rgba(255,255,255,0.055);
+    border:1px solid rgba(255,255,255,0.09);
+    border-radius:12px; padding:10px 16px; text-align:center;
+  }
+  .apl-stat-n { font-family:'Syne',sans-serif; font-weight:800; font-size:1.15rem; color:var(--accent); }
+  .apl-stat-l { font-size:0.66rem; color:rgba(255,255,255,0.38); text-transform:uppercase; letter-spacing:0.4px; margin-top:1px; }
+  .apl-features { margin-top:22px; display:flex; flex-direction:column; gap:8px; z-index:1; width:100%; }
+  .apl-feat {
+    display:flex; align-items:center; gap:10px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    border-radius:10px; padding:9px 14px; text-align:left;
+  }
+  .apl-feat-icon { font-size:1rem; flex-shrink:0; }
+  .apl-feat-text { font-size:0.78rem; color:rgba(255,255,255,0.55); line-height:1.4; }
+
+  /* RIGHT PANEL */
+  .auth-panel-right {
+    background:rgba(10,20,35,0.95);
+    backdrop-filter:blur(20px);
+    padding:48px 44px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .apr-tabs {
+    display:flex; gap:0; margin-bottom:32px;
+    background:rgba(255,255,255,0.05); border-radius:12px; padding:4px;
+    border:1px solid rgba(255,255,255,0.07);
+  }
+  .apr-tab {
+    flex:1; padding:10px; text-align:center; border-radius:9px;
+    color:rgba(255,255,255,0.45); font-size:0.9rem; font-weight:600;
+    cursor:pointer; transition:all 0.22s; user-select:none;
+  }
+  .apr-tab.active { background:var(--sky); color:#fff; box-shadow:0 4px 14px rgba(14,165,233,0.35); }
+  .apr-heading { font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; color:#fff; margin-bottom:5px; }
+  .apr-sub { color:rgba(255,255,255,0.38); font-size:0.85rem; margin-bottom:26px; }
+
+  .auth-form { display:none; flex-direction:column; gap:16px; }
+  .auth-form.active { display:flex; }
+
+  .af-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .af-field { display:flex; flex-direction:column; gap:6px; }
+  .af-label {
+    font-size:0.75rem; font-weight:700; letter-spacing:0.6px;
+    text-transform:uppercase; color:rgba(255,255,255,0.45);
+  }
+  .af-input-wrap { position:relative; }
+  .af-icon {
+    position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    font-size:1rem; pointer-events:none; opacity:0.5;
+  }
+  .af-input {
+    width:100%; padding:12px 14px 12px 40px;
+    background:rgba(255,255,255,0.06);
+    border:1.5px solid rgba(255,255,255,0.1);
+    border-radius:11px; color:#fff;
+    font-family:'DM Sans',sans-serif; font-size:0.92rem;
+    outline:none; transition:all 0.2s;
+  }
+  .af-input::placeholder { color:rgba(255,255,255,0.22); }
+  .af-input:focus { border-color:var(--sky); background:rgba(14,165,233,0.07); }
+  .af-input.err { border-color:#ef4444; background:rgba(239,68,68,0.06); }
+  .af-input.ok { border-color:#22c55e; }
+
+  .af-msg {
+    padding:11px 16px; border-radius:10px; font-size:0.83rem;
+    line-height:1.5; display:none;
+  }
+  .af-msg.err { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#fca5a5; display:flex; gap:8px; align-items:flex-start; }
+  .af-msg.ok  { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); color:#86efac; display:flex; gap:8px; align-items:center; }
+
+  .af-btn {
+    padding:14px; border-radius:12px; border:none;
+    background:linear-gradient(135deg, #0ea5e9, #06b6d4);
+    color:#fff; font-family:'DM Sans',sans-serif;
+    font-weight:700; font-size:0.97rem; cursor:pointer;
+    transition:all 0.22s; position:relative; overflow:hidden;
+    box-shadow:0 4px 20px rgba(14,165,233,0.3);
+  }
+  .af-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(14,165,233,0.45); }
+  .af-btn:active { transform:translateY(0); }
+  .af-btn.loading { opacity:0.7; pointer-events:none; }
+
+  .af-switch {
+    text-align:center; color:rgba(255,255,255,0.35); font-size:0.83rem; margin-top:2px;
+  }
+  .af-switch span { color:var(--accent); cursor:pointer; font-weight:600; }
+  .af-switch span:hover { text-decoration:underline; }
+
+  .af-strength { display:flex; gap:4px; margin-top:4px; }
+  .af-strength-bar { flex:1; height:3px; border-radius:3px; background:rgba(255,255,255,0.1); transition:background 0.3s; }
+
+  /* NAV user */
+  .user-bar { display:flex; align-items:center; gap:8px; }
+  .user-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--sky),var(--accent2)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; color:white; }
+  .user-name-nav { color:rgba(255,255,255,0.8); font-size:0.85rem; font-weight:500; }
+  .logout-btn { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:5px 12px; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.8rem; cursor:pointer; transition:all 0.2s; }
+  .logout-btn:hover { background:rgba(239,68,68,0.15); color:#fca5a5; }
+
+  @media(max-width:700px) {
+    .auth-wrap { grid-template-columns:1fr; }
+    .auth-panel-left { display:none; }
+    .auth-panel-right { padding:32px 24px; }
+    .af-row { grid-template-columns:1fr; }
+  }
+
+
+  /* ===== AI CHAT ===== */
+  #ai-chat-btn {
+    position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; box-shadow: 0 4px 24px rgba(14,165,233,0.45);
+    transition: all 0.25s;
+  }
+  #ai-chat-btn:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(14,165,233,0.6); }
+
+  #ai-chat-box {
+    position: fixed; bottom: 100px; right: 28px; z-index: 9998;
+    width: 360px; max-height: 520px;
+    background: #0c1a2e; border: 1px solid rgba(56,189,248,0.25);
+    border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    display: none; flex-direction: column; overflow: hidden;
+    animation: chatIn 0.3s cubic-bezier(.22,.68,0,1.2);
+  }
+  @keyframes chatIn { from{opacity:0;transform:translateY(20px) scale(0.95);}to{opacity:1;transform:none;} }
+  #ai-chat-box.open { display: flex; }
+
+  .ai-chat-header {
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+    padding: 14px 18px; display: flex; align-items: center; gap: 10px;
+  }
+  .ai-chat-header-icon { font-size: 1.4rem; }
+  .ai-chat-header-text { flex: 1; }
+  .ai-chat-header-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; color:#fff; }
+  .ai-chat-header-sub { font-size:0.72rem; color:rgba(255,255,255,0.75); }
+  .ai-chat-close { background:rgba(255,255,255,0.2); border:none; color:#fff; width:28px; height:28px;
+    border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; }
+  .ai-chat-close:hover { background:rgba(255,255,255,0.35); }
+
+  .ai-chat-messages {
+    flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+    max-height: 340px;
+  }
+  .ai-chat-messages::-webkit-scrollbar { width: 4px; }
+  .ai-chat-messages::-webkit-scrollbar-thumb { background: rgba(56,189,248,0.3); border-radius:4px; }
+
+  .ai-msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.55; }
+  .ai-msg.bot { background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.2);
+    color: rgba(255,255,255,0.88); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .ai-msg.user { background: linear-gradient(135deg,#0ea5e9,#06b6d4); color:#fff;
+    align-self: flex-end; border-bottom-right-radius: 4px; }
+  .ai-msg.typing { opacity: 0.6; font-style: italic; }
+
+  .ai-chat-input-row {
+    padding: 12px 14px; border-top: 1px solid rgba(56,189,248,0.15);
+    display: flex; gap: 8px; align-items: center;
+  }
+  #ai-chat-input {
+    flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 9px 13px; color: #fff;
+    font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none;
+    transition: border-color 0.2s;
+  }
+  #ai-chat-input::placeholder { color: rgba(255,255,255,0.3); }
+  #ai-chat-input:focus { border-color: var(--sky); }
+  #ai-chat-send {
+    background: linear-gradient(135deg,#0ea5e9,#06b6d4); border:none; color:#fff;
+    width: 36px; height: 36px; border-radius: 10px; cursor:pointer; font-size:1rem;
+    display:flex; align-items:center; justify-content:center; transition:all 0.2s; flex-shrink:0;
+  }
+  #ai-chat-send:hover { transform: scale(1.08); }
+  #ai-chat-send:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+</style>
+</head>
+<body>
+
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay">
+  <div class="auth-wrap">
+
+    <!-- LEFT PANEL -->
+    <div class="auth-panel-left">
+      <div class="apl-photo-ring">
+        <img src="data:image/jpeg;base64,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" alt="Азамат Рахматуллаев">
+        <div class="apl-online"></div>
+      </div>
+      <div class="apl-title">☁️ <em>Бұлттық</em><br>Технологиялар</div>
+      <div class="apl-divider"></div>
+      <div class="apl-author">👨‍💻 Рахматуллаев Азамат</div>
+      <div class="apl-uni">Абай атындағы ҚазҰПУ<br>3 курс · Информатика мұғалімі</div>
+      <div class="apl-stats">
+        <div class="apl-stat"><div class="apl-stat-n">15</div><div class="apl-stat-l">Лекция</div></div>
+        <div class="apl-stat"><div class="apl-stat-n">30</div><div class="apl-stat-l">Семинар</div></div>
+        <div class="apl-stat"><div class="apl-stat-n">6</div><div class="apl-stat-l">Тест</div></div>
+      </div>
+      <div class="apl-features">
+        <div class="apl-feat"><span class="apl-feat-icon">🎬</span><span class="apl-feat-text">20+ видео сабақ</span></div>
+        <div class="apl-feat"><span class="apl-feat-icon">✅</span><span class="apl-feat-text">150+ тест сұрақ</span></div>
+        <div class="apl-feat"><span class="apl-feat-icon">🛡️</span><span class="apl-feat-text">Тіркелген оқушыларға ғана</span></div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="auth-panel-right">
+      <div class="apr-tabs">
+        <div class="apr-tab active" id="tab-login" onclick="switchTab('login')">🔑 Кіру</div>
+        <div class="apr-tab" id="tab-reg" onclick="switchTab('reg')">✨ Тіркелу</div>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="auth-form active" id="form-login">
+        <div>
+          <div class="apr-heading">Қош келдіңіз! 👋</div>
+          <div class="apr-sub">Аккаунтыңызға кіріп курсты жалғастырыңыз</div>
+        </div>
+        <div class="af-field">
+          <label class="af-label">📧 Email</label>
+          <div class="af-input-wrap">
+            <span class="af-icon">✉️</span>
+            <input class="af-input" id="li-email" type="email" placeholder="email@example.com" oninput="clearMsg('li-msg')">
+          </div>
+        </div>
+        <div class="af-field">
+          <label class="af-label">🔒 Құпия сөз</label>
+          <div class="af-input-wrap">
+            <span class="af-icon">🔑</span>
+            <input class="af-input" id="li-pass" type="password" placeholder="••••••••" oninput="clearMsg('li-msg')" onkeydown="if(event.key==='Enter')doLogin()">
+          </div>
+        </div>
+        <div class="af-msg" id="li-msg"></div>
+        <button class="af-btn" onclick="doLogin()">→ Курсқа кіру</button>
+        <div class="af-switch">Аккаунтыңыз жоқ па? <span onclick="switchTab('reg')">Тіркелу</span></div>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="auth-form" id="form-reg">
+        <div>
+          <div class="apr-heading">Тіркелу 🎓</div>
+          <div class="apr-sub">Тегін тіркеліп, толық курсқа қол жеткізіңіз</div>
+        </div>
+        <div class="af-row">
+          <div class="af-field">
+            <label class="af-label">👤 Аты</label>
+            <div class="af-input-wrap">
+              <span class="af-icon">👤</span>
+              <input class="af-input" id="rg-fname" type="text" placeholder="Азамат" oninput="clearMsg('rg-msg')">
+            </div>
+          </div>
+          <div class="af-field">
+            <label class="af-label">👤 Тегі</label>
+            <div class="af-input-wrap">
+              <span class="af-icon">👥</span>
+              <input class="af-input" id="rg-lname" type="text" placeholder="Рахматуллаев" oninput="clearMsg('rg-msg')">
+            </div>
+          </div>
+        </div>
+        <div class="af-field">
+          <label class="af-label">📧 Email</label>
+          <div class="af-input-wrap">
+            <span class="af-icon">✉️</span>
+            <input class="af-input" id="rg-email" type="email" placeholder="email@example.com" oninput="clearMsg('rg-msg')">
+          </div>
+        </div>
+        <div class="af-field">
+          <label class="af-label">🔒 Құпия сөз</label>
+          <div class="af-input-wrap">
+            <span class="af-icon">🔑</span>
+            <input class="af-input" id="rg-pass" type="password" placeholder="Кем дегенде 6 таңба" oninput="checkStrength();clearMsg('rg-msg')">
+          </div>
+          <div class="af-strength" id="strength-bars">
+            <div class="af-strength-bar" id="sb1"></div>
+            <div class="af-strength-bar" id="sb2"></div>
+            <div class="af-strength-bar" id="sb3"></div>
+            <div class="af-strength-bar" id="sb4"></div>
+          </div>
+        </div>
+        <div class="af-field">
+          <label class="af-label">🔒 Растау</label>
+          <div class="af-input-wrap">
+            <span class="af-icon">✅</span>
+            <input class="af-input" id="rg-pass2" type="password" placeholder="Құпия сөзді қайталаңыз" oninput="clearMsg('rg-msg')" onkeydown="if(event.key==='Enter')doRegister()">
+          </div>
+        </div>
+        <div class="af-msg" id="rg-msg"></div>
+        <button class="af-btn" onclick="doRegister()">✓ Тіркелу</button>
+        <div class="af-switch">Аккаунтыңыз бар ма? <span onclick="switchTab('login')">Кіру</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">☁️ <span>Бұлттық</span> Технологиялар</div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('home')">Басты</a>
+    <a href="#" onclick="showPage('lectures')">Лекциялар</a>
+    <a href="#" onclick="showPage('seminars')">Семинарлар</a>
+    <a href="#" onclick="showPage('videos')">Видео</a>
+    <a href="#" onclick="showPage('tests')">Тесттер</a>
+    <a href="#" onclick="showPage('tasks')">Тапсырмалар</a>
+  </div>
+  <div id="nav-user-wrap" style="display:flex; align-items:center; gap:8px;">
+    <button class="nav-btn" id="nav-start-btn" onclick="showPage('lectures')">Оқуды бастау →</button>
+    <div id="nav-logged-user" style="display:none; align-items:center; gap:8px;">
+      <div class="user-avatar" id="nav-avatar"></div>
+      <span class="user-name-nav" id="nav-username"></span>
+      <button class="logout-btn" onclick="doLogout()">Шығу</button>
+    </div>
+  </div>
+
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="home" class="page active">
+  <div style="background: linear-gradient(135deg, var(--night) 0%, var(--night2) 60%, #0c2d4a 100%); position:relative; overflow:hidden;">
+    <div class="hero-bg"></div>
+    <div class="clouds-anim">
+      <div class="cloud-el"></div><div class="cloud-el"></div>
+      <div class="cloud-el"></div><div class="cloud-el"></div>
+    </div>
+    <div class="hero-content">
+      <div>
+        <div class="hero-badge">🎓 Толық онлайн курс · 2024</div>
+        <h1 class="hero-title">
+          <em>Бұлттық</em><br>Технологиялар
+        </h1>
+        <p class="hero-desc">
+          Cloud Computing негіздерінен бастап AWS, Azure, GCP платформаларына дейін.
+          Заманауи бұлттық архитектура, DevOps, микросервистер және қауіпсіздік.
+        </p>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num">15</div><div class="stat-label">Лекция</div></div>
+          <div class="stat"><div class="stat-num">30</div><div class="stat-label">Семинар</div></div>
+          <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Видео</div></div>
+          <div class="stat"><div class="stat-num">150+</div><div class="stat-label">Тест сұрақ</div></div>
+        </div>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('lectures')">🚀 Курсты бастау</button>
+          <button class="btn-outline" onclick="showPage('videos')">▶ Видео сабақтар</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="cloud-diagram">
+          <div class="cd-center">☁️</div>
+          <div class="cd-nodes">
+            <div class="cd-node"><span class="icon">🖥️</span>IaaS</div>
+            <div class="cd-node"><span class="icon">⚙️</span>PaaS</div>
+            <div class="cd-node"><span class="icon">📦</span>SaaS</div>
+            <div class="cd-node"><span class="icon">🔒</span>Security</div>
+            <div class="cd-node"><span class="icon">📊</span>DevOps</div>
+            <div class="cd-node"><span class="icon">🌐</span>Network</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">Курс мазмұны</div>
+      <h2 class="section-title">Не үйренесіз?</h2>
+      <p class="section-desc">Бұлттық технологиялардың барлық аспектілерін терең зерттеңіз</p>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap:16px;">
+      <div class="card reveal">
+        <div class="card-icon">☁️</div>
+        <div class="card-title">Cloud Computing негіздері</div>
+        <div class="card-desc">IaaS, PaaS, SaaS модельдерін, жеке, жалпы және гибридті бұлттарды үйреніңіз.</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">🏗️</div>
+        <div class="card-title">AWS · Azure · GCP</div>
+        <div class="card-desc">Әлемдегі үш ірі бұлттық платформамен жұмыс тәжірибесін алыңыз.</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">🐳</div>
+        <div class="card-title">Docker & Kubernetes</div>
+        <div class="card-desc">Контейнерлеу технологиялары мен оркестрация жүйесін меңгеріңіз.</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">🔒</div>
+        <div class="card-title">Cloud Security</div>
+        <div class="card-desc">IAM, шифрлау, Zero Trust архитектурасы және сәйкестік талаптары.</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">Serverless & FaaS</div>
+        <div class="card-desc">AWS Lambda, Azure Functions арқылы функциялық бағдарламалауды үйреніңіз.</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Cloud Monitoring</div>
+        <div class="card-desc">CloudWatch, Azure Monitor және Prometheus арқылы жүйені бақылаңыз.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTHOR SECTION -->
+  <div class="author-section">
+    <div class="author-inner">
+      <div class="author-photo-wrap">
+        
+        <div class="author-badge-icon">&#9999;&#65039;</div>
+      </div>
+      <div class="author-info">
+        <div class="author-tag">&#128104;&#8205;&#127979; Курс авторы</div>
+        <div class="author-name">Рахматуллаев Азамат</div>
+        <div class="author-uni">
+          <strong>Абай атындағы Қазақ ұлттық педагогикалық университеті</strong><br>
+          3-курс студенті · Мамандық: Информатика мұғалімі
+        </div>
+        <div class="author-chips">
+          <span class="author-chip">&#9729;&#65039; Cloud Computing</span>
+          <span class="author-chip">&#128187; Информатика</span>
+          <span class="author-chip">&#127891; Абай ҚазҰПУ</span>
+          <span class="author-chip">&#128218; 15 лекция · 30 семинар</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2024 <strong>Бұлттық Технологиялар</strong> курсы · Барлық материалдар дайындалған</p>
+  </footer>
+</div>
+
+<!-- ===== LECTURES PAGE ===== -->
+<div id="lectures" class="page">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">📚 Лекциялар</div>
+      <h2 class="section-title">15 Лекция</h2>
+      <p class="section-desc">Теориялық білімді тереңдетіңіз</p>
+    </div>
+
+    <div class="course-progress">
+      <div class="cp-header">
+        <span class="cp-title">📈 Прогрессіңіз</span>
+        <span class="cp-pct" id="lec-pct">0%</span>
+      </div>
+      <div class="cp-bar"><div class="cp-fill" id="lec-fill"></div></div>
+      <div class="cp-labels"><span>Басталды</span><span>Аяқталды</span></div>
+    </div>
+
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" id="lecture-search" placeholder="Лекция іздеу..." oninput="filterCards('lectures-grid', this.value)">
+    </div>
+
+    <div class="cards-grid" id="lectures-grid"></div>
+  </div>
+</div>
+
+<!-- ===== SEMINARS PAGE ===== -->
+<div id="seminars" class="page">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">🧪 Семинарлар</div>
+      <h2 class="section-title">30 Семинар</h2>
+      <p class="section-desc">Практикалық дағдыларды дамытыңыз</p>
+    </div>
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" id="seminar-search" placeholder="Семинар іздеу..." oninput="filterCards('seminars-grid', this.value)">
+    </div>
+    <div class="tabs" id="seminar-tabs"></div>
+    <div class="cards-grid" id="seminars-grid"></div>
+  </div>
+</div>
+
+<!-- ===== VIDEOS PAGE ===== -->
+<div id="videos" class="page">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">🎬 Видео сабақтар</div>
+      <h2 class="section-title">Видео курс</h2>
+      <p class="section-desc">Визуалды оқыту материалдары</p>
+    </div>
+    <div class="video-list" id="videos-grid"></div>
+  </div>
+</div>
+
+<!-- ===== TESTS PAGE ===== -->
+<div id="tests" class="page">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">📝 Тесттер</div>
+      <h2 class="section-title">Білімді тексеру</h2>
+      <p class="section-desc">Тест тапсырып, білім деңгейіңізді анықтаңыз</p>
+    </div>
+    <div class="cards-grid" id="tests-grid"></div>
+  </div>
+</div>
+
+<!-- ===== TASKS PAGE ===== -->
+<div id="tasks" class="page">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">✍️ Тапсырмалар</div>
+      <h2 class="section-title">Практикалық тапсырмалар</h2>
+      <p class="section-desc">Білімді іс жүзінде қолданыңыз</p>
+    </div>
+    <div id="tasks-content"></div>
+  </div>
+</div>
+
+<!-- ===== DETAIL PAGE ===== -->
+<div id="detail-page" class="page">
+  <div class="detail-hero" id="detail-hero">
+    <div class="detail-hero-inner">
+      <button class="back-btn" id="detail-back">← Артқа</button>
+      <div class="detail-type-tag" id="detail-tag"></div>
+      <h1 class="detail-title" id="detail-title"></h1>
+      <div class="detail-meta" id="detail-meta"></div>
+    </div>
+  </div>
+  <div class="detail-body" id="detail-body"></div>
+</div>
+
+<!-- ===== QUIZ PAGE ===== -->
+<div id="quiz-page" class="page">
+  <div class="section" style="max-width:700px;">
+    <button class="back-btn" style="color:var(--muted);background:var(--cloud);border:1px solid var(--border);" id="quiz-back">← Тесттерге оралу</button>
+    <div class="detail-card" style="margin-top:24px;">
+      <h2 id="quiz-title" style="font-size:1.3rem;margin-bottom:4px;"></h2>
+      <div class="quiz-container" id="quiz-container"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const lectures = [
+  {
+    id:'l1', num:'01', icon:'☁️',
+    title: 'Бұлттық есептеулерге кіріспе',
+    desc: 'Cloud Computing ұғымы, тарихы, негізгі артықшылықтары және даму кезеңдері.',
+    duration: '1 сағ 20 мин', level:'Бастауыш',
+    content: {
+      intro: 'Бұлттық есептеулер (Cloud Computing) — бұл интернет арқылы компьютерлік ресурстарды (сервер, деректер базасы, желі, бағдарлама) ұсыну технологиясы. 2006 жылы Amazon AWS сервисін іске қосқаннан бері бұлт технологиялары бизнесті түбегейлі өзгертті.',
+      topics: [
+        'Cloud Computing анықтамасы және тарихы (1960–2024)',
+        'Бұлттың артықшылықтары: икемділік, үнемдеу, жылдамдық',
+        'Негізгі Cloud провайдерлер: AWS, Azure, GCP, Alibaba, Yandex',
+        'On-premise vs Cloud салыстыру',
+        'CapEx vs OpEx модельдері',
+        'Cloud adoption жолы: assess, plan, migrate, optimize',
+        'Қазақстандағы бұлттық технологиялардың дамуы',
+      ],
+      theory: `
+        <p>Бұлттық есептеулер — бұл "as-a-service" моделі бойынша ресурстарды ұсынудың инновациялық тәсілі. NIST анықтамасы бойынша бұлттық есептеулерде 5 негізгі қасиет болуы керек:</p>
+        <p><strong>1. On-demand self-service</strong> — пайдаланушы провайдермен байланыссыз ресурс бөле алады.</p>
+        <p><strong>2. Broad network access</strong> — ресурстарға кез келген желі арқылы кіруге болады.</p>
+        <p><strong>3. Resource pooling</strong> — провайдер ресурстарды пулда ұстайды және динамикалық бөледі.</p>
+        <p><strong>4. Rapid elasticity</strong> — ресурстарды жылдам ұлғайтуға/кішірейтуге болады.</p>
+        <p><strong>5. Measured service</strong> — пайдалану өлшенеді және есептеледі.</p>
+      `,
+      keyTerms: ['Virtualization', 'Hypervisor', 'Multi-tenancy', 'Elasticity', 'Scalability', 'Pay-as-you-go']
+    }
+  },
+  {
+    id:'l2', num:'02', icon:'🏗️',
+    title: 'Қызмет көрсету модельдері: IaaS, PaaS, SaaS',
+    desc: 'Үш негізгі бұлттық қызмет моделін, олардың айырмашылықтары мен қолданыс аймақтарын зерттейміз.',
+    duration: '1 сағ 40 мин', level:'Бастауыш',
+    content: {
+      intro: 'IaaS, PaaS және SaaS — бұлттық қызметтердің үш негізгі деңгейі. Әрбір модельде жауапкершілік аймақтары (Shared Responsibility Model) бөлек анықталған.',
+      topics: [
+        'IaaS (Infrastructure as a Service) — AWS EC2, Azure VM',
+        'PaaS (Platform as a Service) — Heroku, Google App Engine',
+        'SaaS (Software as a Service) — Salesforce, Office 365',
+        'FaaS (Function as a Service) — Serverless моделі',
+        'DaaS, DBaaS, CaaS қосымша модельдер',
+        'Shared Responsibility Model',
+        'Қай модельді қашан таңдау керек?',
+      ],
+      theory: `
+        <p><strong>IaaS</strong> — базалық инфрақұрылымды жалдау: виртуалды машиналар, желі, дискілер. Пайдаланушы ОЖ-дан жоғарыны басқарады. Мысал: AWS EC2.</p>
+        <p><strong>PaaS</strong> — дайын даму платформасы. ОЖ, runtime, middleware бұлт провайдері басқарады. Мысал: Google App Engine, Azure App Service.</p>
+        <p><strong>SaaS</strong> — дайын бағдарлама. Инфрақұрылымнан бастап бағдарламаға дейін провайдер жауапты. Мысал: Gmail, Zoom, Slack.</p>
+        <p>Shared Responsibility Model — провайдер мен клиент арасындағы қауіпсіздік жауапкершілігін бөлу принципі. IaaS-та клиентке көп жауапкершілік түседі, SaaS-та — ең аз.</p>
+      `,
+      keyTerms: ['IaaS', 'PaaS', 'SaaS', 'FaaS', 'Shared Responsibility', 'Runtime', 'Middleware']
+    }
+  },
+  {
+    id:'l3', num:'03', icon:'🌐',
+    title: 'Орналастыру модельдері: Жеке, Жалпы, Гибридті бұлт',
+    desc: 'Public, Private, Hybrid және Multi-Cloud стратегияларын, олардың артықшылықтарын зерттейміз.',
+    duration: '1 сағ 30 мин', level:'Бастауыш',
+    content: {
+      intro: 'Бұлттық орналастыру моделінің дұрыс таңдалуы бизнес стратегиясына, деректер қауіпсіздігіне және шығынға тікелей әсер етеді.',
+      topics: [
+        'Public Cloud: артықшылықтары, кемшіліктері, қолдану жағдайлары',
+        'Private Cloud: OpenStack, VMware vSphere',
+        'Hybrid Cloud: Azure Arc, AWS Outposts',
+        'Multi-Cloud стратегиясы',
+        'Community Cloud ерекшеліктері',
+        'Cloud vs Edge Computing',
+        'Деректер резиденттілігі (Data Residency) талаптары',
+      ],
+      theory: `
+        <p><strong>Public Cloud</strong> — ресурстар интернет арқылы ашық жалдалады. Бірнеше клиент бір инфрақұрылымды (multi-tenant) бөліседі. AWS, Azure, GCP осы модельде жұмыс істейді.</p>
+        <p><strong>Private Cloud</strong> — бір ұйымға арналған жеке бұлт. Кибер қауіпсіздік тұрғысынан қолайлы. OpenStack немесе VMware негізінде орнатылады.</p>
+        <p><strong>Hybrid Cloud</strong> — жеке және жалпы бұлтты біріктіреді. Деректердің сезімталдығына байланысты бөлінеді. Azure Arc, AWS Outposts бұл моделді жеңілдетеді.</p>
+        <p><strong>Multi-Cloud</strong> — бірнеше провайдердің қызметтерін пайдалану. Vendor lock-in тәуекелін азайтады, бірақ басқару күрделіленеді.</p>
+      `,
+      keyTerms: ['Public Cloud', 'Private Cloud', 'Hybrid Cloud', 'Multi-Cloud', 'Vendor Lock-in', 'Data Residency']
+    }
+  },
+  {
+    id:'l4', num:'04', icon:'🖥️',
+    title: 'Виртуализация және гипервизорлар',
+    desc: 'Виртуализация технологиясы, Type 1/Type 2 гипервизорлар, VMware, KVM, Hyper-V.',
+    duration: '1 сағ 50 мин', level:'Орташа',
+    content: {
+      intro: 'Виртуализация — бұлттық есептеулердің негізгі іргетасы. Бір физикалық серверде бірнеше виртуалды машина (VM) жұмыс істеуге мүмкіндік береді.',
+      topics: [
+        'Виртуализация концепциясы және тарихы',
+        'Type 1 гипервизор: VMware ESXi, Microsoft Hyper-V, KVM',
+        'Type 2 гипервизор: VirtualBox, VMware Workstation',
+        'Аппараттық виртуализация: Intel VT-x, AMD-V',
+        'Желілік виртуализация (SDN, NFV)',
+        'Жад виртуализациясы (Memory Ballooning)',
+        'Виртуализация vs Контейнеризация',
+      ],
+      theory: `
+        <p><strong>Виртуализация</strong> — физикалық ресурстарды (CPU, RAM, Storage) виртуалды ресурстарға бөлу технологиясы. Бір хост серверде бірнеше VM жұмыс істейді.</p>
+        <p><strong>Type 1 гипервизор (Bare-metal)</strong> — тікелей аппаратураға орнатылады. Жоғары өнімділік береді. VMware ESXi, Microsoft Hyper-V, Citrix XenServer мысалдары.</p>
+        <p><strong>Type 2 гипервизор (Hosted)</strong> — операциялық жүйенің үстіне орнатылады. Тестілеу, даму ортасы үшін қолайлы. VirtualBox, VMware Workstation мысалдары.</p>
+        <p><strong>KVM (Kernel-based Virtual Machine)</strong> — Linux ядросына кіріктірілген ашық бастапқы кодты гипервизор. AWS EC2 осы технологияны пайдаланады.</p>
+      `,
+      keyTerms: ['Hypervisor', 'VM', 'Bare-metal', 'KVM', 'ESXi', 'Hyper-V', 'Intel VT-x']
+    }
+  },
+  {
+    id:'l5', num:'05', icon:'🐳',
+    title: 'Контейнеризация: Docker технологиясы',
+    desc: 'Docker архитектурасы, Image, Container, Dockerfile, Docker Compose.',
+    duration: '2 сағ 10 мин', level:'Орташа',
+    content: {
+      intro: 'Docker 2013 жылы пайда болып, бағдарламалық жасақтаманы орналастыру тәсілін түбегейлі өзгертті. "Works on my machine" мәселесін шешті.',
+      topics: [
+        'Docker тарихы және архитектурасы',
+        'Docker Image vs Container айырмашылығы',
+        'Dockerfile жазу және Image құру',
+        'Docker Hub — контейнер тізілімі',
+        'Docker Compose — multi-container қосымшалар',
+        'Docker Networking: bridge, host, overlay',
+        'Docker Volumes — деректерді сақтау',
+        'Docker security best practices',
+      ],
+      theory: `
+        <p><strong>Docker</strong> — қосымшаларды контейнерлерге упаковкалауға арналған платформа. Контейнер — изоляцияланған процесс кеңістігі, бірдей ядроны бөліседі.</p>
+        <p><strong>Docker Image</strong> — read-only шаблон. Dockerfile нұсқауларынан жасалады. Layer-based структурасы бар.</p>
+        <p><strong>Docker Container</strong> — Image-тен іске қосылған процесс. Оқылатын-жазылатын layer қосылады.</p>
+        <p><strong>Dockerfile</strong> мысалы:</p>
+        <p>FROM node:18-alpine → WORKDIR /app → COPY package*.json ./ → RUN npm install → COPY . . → EXPOSE 3000 → CMD ["node","server.js"]</p>
+        <p><strong>Docker Compose</strong> — YAML форматында бірнеше контейнерді бір команда (docker compose up) арқылы іске қосуға мүмкіндік береді.</p>
+      `,
+      keyTerms: ['Docker', 'Container', 'Image', 'Dockerfile', 'Registry', 'Docker Compose', 'Layer', 'Volume']
+    }
+  },
+  {
+    id:'l6', num:'06', icon:'⚙️',
+    title: 'Kubernetes — контейнер оркестрациясы',
+    desc: 'Kubernetes архитектурасы, Pod, Node, Cluster, Deployment, Service, Ingress.',
+    duration: '2 сағ 30 мин', level:'Жоғары',
+    content: {
+      intro: 'Kubernetes (K8s) — Google-дың Borg жүйесінен шыққан, 2014 жылы ашық бастапқы кодқа өткен контейнер оркестрация жүйесі.',
+      topics: [
+        'Kubernetes архитектурасы: Master Node, Worker Node',
+        'Control Plane компоненттері: API Server, etcd, Scheduler, Controller Manager',
+        'Pod — ең кіші даму бірлігі',
+        'Deployment, ReplicaSet, StatefulSet',
+        'Service: ClusterIP, NodePort, LoadBalancer',
+        'ConfigMap және Secret',
+        'Persistent Volume және PVC',
+        'Horizontal Pod Autoscaler (HPA)',
+        'Ingress Controller',
+        'Helm — K8s пакет менеджері',
+      ],
+      theory: `
+        <p><strong>Kubernetes</strong> контейнерленген қосымшалардың орналастырылуын, масштабталуын және басқарылуын автоматтандырады.</p>
+        <p><strong>Control Plane</strong>: kube-apiserver (REST API), etcd (кластер күйі), kube-scheduler (Pod орналастыру), kube-controller-manager.</p>
+        <p><strong>Pod</strong> — бір немесе бірнеше контейнерді ұстайтын K8s объектісі. Бір IP мекенжай бөліседі.</p>
+        <p><strong>Deployment</strong> — Pod-тардың қалаулы күйін (desired state) анықтайды. Rolling update, rollback мүмкіндіктерін береді.</p>
+        <p><strong>Service</strong> — Pod-тарға тұрақты желілік кіру нүктесі. ClusterIP: кластер ішінде; NodePort: сыртқы порт; LoadBalancer: бұлт балансировщигі.</p>
+      `,
+      keyTerms: ['Kubernetes', 'Pod', 'Node', 'Cluster', 'Deployment', 'Service', 'Ingress', 'Helm', 'etcd']
+    }
+  },
+  {
+    id:'l7', num:'07', icon:'🔒',
+    title: 'Бұлттық қауіпсіздік негіздері',
+    desc: 'IAM, шифрлау, желілік қауіпсіздік, Zero Trust Architecture, сәйкестік.',
+    duration: '2 сағ', level:'Орташа',
+    content: {
+      intro: 'Бұлттық қауіпсіздік — ең маңызды тақырыптардың бірі. 2023 жылы Gartner деректері бойынша бұлттық деректер бұзушылықтарының 95%-ы адам қателіктерінен туындаған.',
+      topics: [
+        'IAM (Identity and Access Management)',
+        'MFA (Multi-Factor Authentication)',
+        'Деректерді шифрлау: at-rest, in-transit, in-use',
+        'VPC (Virtual Private Cloud) және Network Security Groups',
+        'Zero Trust Architecture принциптері',
+        'CSPM (Cloud Security Posture Management)',
+        'SOC2, ISO 27001, PCI DSS сәйкестік стандарттары',
+        'DDOS қорғаныс жүйелері',
+      ],
+      theory: `
+        <p><strong>IAM</strong> — пайдаланушылар мен ресурстар арасындағы рұқсаттарды басқарады. Принцип: Least Privilege (ең аз рұқсат).</p>
+        <p><strong>Encryption at-rest</strong> — сақталған деректер шифрланады (AES-256). <strong>In-transit</strong> — берілу кезінде TLS/SSL пайдаланылады.</p>
+        <p><strong>Zero Trust</strong> — "ешкімге/ешнәрсеге сенбе" принципі. Кез келген сұрауды верификациялаудан өткізу керек.</p>
+        <p><strong>VPC</strong> — виртуалды жеке желі. Subnet, Security Group, NACLдар арқылы трафик басқарылады.</p>
+      `,
+      keyTerms: ['IAM', 'MFA', 'Encryption', 'Zero Trust', 'VPC', 'CSPM', 'SOC2', 'RBAC']
+    }
+  },
+  {
+    id:'l8', num:'08', icon:'⚡',
+    title: 'Serverless Computing және FaaS',
+    desc: 'AWS Lambda, Azure Functions, Google Cloud Functions, Event-driven Architecture.',
+    duration: '1 сағ 45 мин', level:'Орташа',
+    content: {
+      intro: 'Serverless — серверлерді басқарусыз код орындау парадигмасы. Инфрақұрылым жауапкершілігі провайдерге ауысады.',
+      topics: [
+        'Serverless Architecture артықшылықтары',
+        'AWS Lambda: trigger, handler, execution context',
+        'Azure Functions: HTTP, Timer, Event Hub triggers',
+        'Google Cloud Functions',
+        'Cold Start мәселесі және шешімдері',
+        'Event-driven Architecture',
+        'Serverless Framework, SAM, Pulumi',
+        'Serverless шығын оңтайландыру',
+      ],
+      theory: `
+        <p><strong>Serverless</strong> моделінде сервер физикалық тұрғыдан бар, бірақ оны басқарудан пайдаланушы босатылады. Провайдер автоматты масштабтайды.</p>
+        <p><strong>AWS Lambda</strong>: функция тек шақырылған кезде іске қосылады. Тегін деңгей: 1 млн сұрау/ай, 400,000 GB-секунд. Python, Node.js, Java, Go тілдерін қолдайды.</p>
+        <p><strong>Cold Start</strong> — функция алғаш шақырылғанда инициализация уақыты. Provisioned Concurrency арқылы шешіледі.</p>
+        <p><strong>Event-driven Architecture</strong> — компоненттер оқиғалар (events) арқылы байланысады. SQS, SNS, EventBridge пайдаланылады.</p>
+      `,
+      keyTerms: ['Serverless', 'Lambda', 'FaaS', 'Cold Start', 'Trigger', 'Event-driven', 'SAM']
+    }
+  },
+  {
+    id:'l9', num:'09', icon:'📊',
+    title: 'Бұлттық деректер базалары',
+    desc: 'RDS, DynamoDB, CosmosDB, Cloud Spanner, деректер базасын таңдау критерийлері.',
+    duration: '2 сағ', level:'Орташа',
+    content: {
+      intro: 'Бұлттық деректер базалары — DBaaS (Database as a Service) моделі бойынша ұсынылатын, басқарылатын (managed) қызметтер.',
+      topics: [
+        'Relational (SQL) vs Non-relational (NoSQL) таңдауы',
+        'AWS RDS: MySQL, PostgreSQL, MariaDB, Oracle',
+        'Amazon Aurora — высокодоступная DB',
+        'Amazon DynamoDB — NoSQL, key-value',
+        'Azure CosmosDB — globally distributed NoSQL',
+        'Google Cloud Spanner — globally consistent SQL',
+        'Redis — in-memory кэш',
+        'Database replication және sharding',
+        'ACID vs BASE консистенция',
+        'CAP теоремасы',
+      ],
+      theory: `
+        <p><strong>AWS RDS</strong> — басқарылатын SQL деректер базасы қызметі. Multi-AZ орналастыру, автоматты backup, read replica мүмкіндіктері бар.</p>
+        <p><strong>DynamoDB</strong> — serverless NoSQL. Миллисекундтық кідіріс, кез келген масштаб. Partition key + Sort key негізінде жұмыс істейді.</p>
+        <p><strong>CAP теоремасы</strong>: Consistency, Availability, Partition Tolerance — бір уақытта үшеуін бірдей қамтамасыз ету мүмкін емес, екеуін ғана таңдауға болады.</p>
+        <p><strong>Aurora</strong> — MySQL/PostgreSQL-ге сәйкес, стандарт RDS-тен 3-5 есе жылдамырақ. 6 AZ-да 6 replica сақтайды.</p>
+      `,
+      keyTerms: ['RDS', 'DynamoDB', 'CosmosDB', 'NoSQL', 'ACID', 'BASE', 'CAP теоремасы', 'Sharding', 'Replica']
+    }
+  },
+  {
+    id:'l10', num:'10', icon:'🔄',
+    title: 'DevOps және CI/CD бұлтта',
+    desc: 'CI/CD pipeline, GitOps, Infrastructure as Code, Jenkins, GitHub Actions, ArgoCD.',
+    duration: '2 сағ 15 мин', level:'Жоғары',
+    content: {
+      intro: 'DevOps — даму және операциялар командаларын біріктіретін мәдениет пен тәжірибе жиынтығы. CI/CD pipeline автоматтандырылған жеткізу желісін қалыптастырады.',
+      topics: [
+        'DevOps мәдениеті: CALMS Framework',
+        'CI (Continuous Integration) принциптері',
+        'CD (Continuous Delivery vs Deployment) айырмашылығы',
+        'GitHub Actions — cloud-native CI/CD',
+        'Jenkins — open-source automation server',
+        'Infrastructure as Code (IaC): Terraform, Pulumi',
+        'GitOps: ArgoCD, Flux',
+        'Blue-Green Deployment',
+        'Canary Release стратегиясы',
+        'Feature Flags',
+      ],
+      theory: `
+        <p><strong>CI/CD</strong> — кодты жиі интеграциялап, автоматты тексеріп, жылдам жеткізу тәжірибесі. Нетфликс күніне 100+ деплой жасайды.</p>
+        <p><strong>GitHub Actions</strong> — YAML-формат workflow. Push/PR оқиғасынан автоматты іске қосылады. Матрица стратегиясымен бірнеше ортада тест жасайды.</p>
+        <p><strong>Terraform</strong> — HCL тілінде инфрақұрылымды код ретінде жазу. Idempotent (қайталанатын) операциялар. Plan, Apply, Destroy циклі.</p>
+        <p><strong>Blue-Green</strong>: бір уақытта екі ортаны сақтау. Traffic switch арқылы жылдам ауысу. Rollback тривиалды болады.</p>
+      `,
+      keyTerms: ['CI/CD', 'DevOps', 'Terraform', 'GitOps', 'ArgoCD', 'Blue-Green', 'Canary', 'IaC']
+    }
+  },
+  {
+    id:'l11', num:'11', icon:'📈',
+    title: 'Бұлттық мониторинг және логтау',
+    desc: 'CloudWatch, Azure Monitor, Prometheus, Grafana, ELK Stack, SRE принциптері.',
+    duration: '1 сағ 50 мин', level:'Орташа',
+    content: {
+      intro: 'Мониторинг — бұлттық жүйелердің денсаулығын бақылаудың негізгі тәсілі. SRE (Site Reliability Engineering) мәдениетінде observability орталық орын алады.',
+      topics: [
+        'Observability: Metrics, Logs, Traces',
+        'AWS CloudWatch: алармдар, дашбордтар, Insights',
+        'Azure Monitor + Application Insights',
+        'Prometheus — pull-based метрика жүйесі',
+        'Grafana — визуализация платформасы',
+        'ELK Stack: Elasticsearch, Logstash, Kibana',
+        'OpenTelemetry стандарты',
+        'SLI, SLO, SLA анықтамалары',
+        'Error Budget концепциясы',
+        'Distributed Tracing: Jaeger, Zipkin',
+      ],
+      theory: `
+        <p><strong>Observability</strong> үш тіреуіші: Metrics (сандық деректер), Logs (жазба файлдар), Traces (сұрау жолы).</p>
+        <p><strong>Prometheus</strong> — Go тілінде жазылған open-source мониторинг жүйесі. PromQL сұрау тілі. 15 секунд сайын метрика жинайды.</p>
+        <p><strong>SLI</strong> (Service Level Indicator) — өлшенетін көрсеткіш (uptime, latency). <strong>SLO</strong> — мақсат деңгей (99.9%). <strong>SLA</strong> — клиентпен шарт.</p>
+        <p><strong>Error Budget</strong> = 100% - SLO. 99.9% SLO үшін ай сайын 43.8 мин downtime рұқсат етілген.</p>
+      `,
+      keyTerms: ['Observability', 'Prometheus', 'Grafana', 'CloudWatch', 'SLI', 'SLO', 'SLA', 'ELK', 'Tracing']
+    }
+  },
+  {
+    id:'l12', num:'12', icon:'🌍',
+    title: 'Amazon Web Services (AWS) толық шолу',
+    desc: 'AWS негізгі қызметтері: EC2, S3, VPC, RDS, Lambda, EKS, IAM және т.б.',
+    duration: '2 сағ 45 мин', level:'Жоғары',
+    content: {
+      intro: 'AWS — 2006 жылдан бастап жұмыс жасайтын, 200+ қызметі бар, нарықта 32% үлес алатын ірі бұлт провайдері.',
+      topics: [
+        'AWS Global Infrastructure: Region, AZ, Edge Location',
+        'EC2: инстанс түрлері, AMI, Auto Scaling',
+        'S3: объект сақтау, Glacier архив, CloudFront CDN',
+        'VPC: subnet, route table, internet gateway, NAT',
+        'Route 53 — DNS және трафик маршруттау',
+        'ELB — Elastic Load Balancer',
+        'EKS — Kubernetes сервисі',
+        'SQS, SNS — хабарлама жүйелері',
+        'CloudFormation — IaC',
+        'AWS Well-Architected Framework',
+      ],
+      theory: `
+        <p><strong>AWS Regions</strong> — дүниежүзінде 33 өңір. Әр өңірде 2-6 AZ (Availability Zone). AZ — физикалық дата-орталық.</p>
+        <p><strong>EC2 Instance Types</strong>: General Purpose (t3, m6i), Compute Optimized (c6i), Memory Optimized (r6i), Storage Optimized (i3), GPU (p4).</p>
+        <p><strong>S3</strong> — объектілік сақтау, 99.999999999% (11 девятка) сенімділік. Lifecycle policy, versioning, replication мүмкіндіктері.</p>
+        <p><strong>Well-Architected Framework</strong> — 6 тіреуіш: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, Sustainability.</p>
+      `,
+      keyTerms: ['AWS', 'EC2', 'S3', 'VPC', 'IAM', 'Region', 'AZ', 'Auto Scaling', 'CloudFormation', 'EKS']
+    }
+  },
+  {
+    id:'l13', num:'13', icon:'💠',
+    title: 'Microsoft Azure платформасы',
+    desc: 'Azure қызметтері, Active Directory, Azure DevOps, ARM Templates, AKS.',
+    duration: '2 сағ 20 мин', level:'Жоғары',
+    content: {
+      intro: 'Microsoft Azure — нарықта 22% үлесі бар екінші ірі бұлт провайдері. Корпоративтік ортада Active Directory интеграциясымен ерекшеленеді.',
+      topics: [
+        'Azure Global Infrastructure',
+        'Azure Active Directory (AAD) — SSO, MFA',
+        'Azure Virtual Machines және Scale Sets',
+        'Azure Blob Storage, Files, Queues, Tables',
+        'Azure Networking: VNet, NSG, Azure Firewall',
+        'Azure Kubernetes Service (AKS)',
+        'Azure DevOps: Boards, Repos, Pipelines',
+        'Azure Monitor + Log Analytics',
+        'ARM Templates және Bicep',
+        'Azure Cost Management',
+      ],
+      theory: `
+        <p><strong>Azure AD</strong> — Microsoft корпоративтік аутентификация жүйесі. SAML, OIDC, OAuth 2.0 протоколдарын қолдайды. 50,000+ ұйымда пайдаланылады.</p>
+        <p><strong>AKS</strong> — Azure Kubernetes Service. Control plane тегін. Pay only for worker nodes. Azure CNI желілік плагині.</p>
+        <p><strong>ARM Template</strong> — JSON форматындағы Azure инфрақұрылым шаблоны. Bicep — ARM-дің DSL альтернативасы, қысқа және оқылатын синтаксис.</p>
+        <p><strong>Azure Cost Management</strong> — шығынды бақылау, бюджет белгілеу, рекомендациялар. Reserved Instances 72%-ке дейін үнемдейді.</p>
+      `,
+      keyTerms: ['Azure', 'AAD', 'AKS', 'ARM', 'Bicep', 'VNet', 'NSG', 'Azure DevOps', 'Blob Storage']
+    }
+  },
+  {
+    id:'l14', num:'14', icon:'🔵',
+    title: 'Google Cloud Platform (GCP)',
+    desc: 'GCP қызметтері: Compute Engine, GKE, BigQuery, Pub/Sub, Cloud Run.',
+    duration: '2 сағ', level:'Жоғары',
+    content: {
+      intro: 'GCP — Google-дың ішкі инфрақұрылымынан дамып шыққан, AI/ML қызметтерімен және BigQuery аналитикасымен ерекшеленетін платформа.',
+      topics: [
+        'GCP Zones, Regions, Network',
+        'Compute Engine, App Engine, Cloud Run',
+        'GKE (Google Kubernetes Engine)',
+        'Cloud Storage, Cloud SQL, Firestore, Bigtable',
+        'BigQuery — serverless data warehouse',
+        'Pub/Sub — messaging жүйесі',
+        'Vertex AI — ML платформасы',
+        'Cloud IAM, VPC Service Controls',
+        'Anthos — hybrid/multi-cloud платформасы',
+        'GCP Pricing калькулятор',
+      ],
+      theory: `
+        <p><strong>GKE</strong> — Kubernetes-ті бастапқы ойлап тапқан Google-дың K8s қызметі. Autopilot режимі — толық управляемый кластер.</p>
+        <p><strong>BigQuery</strong> — serverless data warehouse. Петабайттық деректерді секундтарда талдайды. Pay-per-query немесе flat-rate баға.</p>
+        <p><strong>Cloud Run</strong> — контейнерленген қосымшаларды serverless іске қосу. Автоматты масштаб, нөлге дейін кішірею.</p>
+        <p><strong>Anthos</strong> — GCP, AWS, Azure, on-premise ортасын бір API арқылы басқару. Service Mesh (Istio), Config Management мүмкіндіктері.</p>
+      `,
+      keyTerms: ['GCP', 'GKE', 'BigQuery', 'Cloud Run', 'Pub/Sub', 'Vertex AI', 'Anthos', 'Firestore']
+    }
+  },
+  {
+    id:'l15', num:'15', icon:'🚀',
+    title: 'Бұлттық технологиялар болашағы',
+    desc: 'Edge Computing, AI/ML бұлтта, Quantum Cloud, Web3 инфрақұрылымы, 2025-2030 трендтер.',
+    duration: '1 сағ 30 мин', level:'Бастауыш',
+    content: {
+      intro: 'Бұлттық технологиялар 2030 жылға қарай $1.8 триллиондық нарыққа жетеді деп болжанады. Gartner, IDC, Forrester аналитиктерінің болжамдарын зерттейміз.',
+      topics: [
+        'Edge Computing және Fog Computing',
+        'AI/ML as a Service: SageMaker, Vertex AI, Azure ML',
+        'Quantum Computing as a Service: AWS Braket, Azure Quantum',
+        'FinOps — бұлт шығынын оңтайландыру',
+        'Green Cloud — тұрақтылық және CO2 нейтралдылық',
+        'Web3 инфрақұрылымы бұлтта',
+        'Zero Trust Network Access (ZTNA)',
+        'Confidential Computing',
+        'Қазақстандағы бұлттық экосистема дамуы',
+      ],
+      theory: `
+        <p><strong>Edge Computing</strong> — деректерді өңдеуді дерек көзіне жақын жүзеге асыру. Кідірісті азайтады. IoT, AR/VR, автономды автомобильдер үшін маңызды.</p>
+        <p><strong>Quantum Cloud</strong> — квант компьютерлеріне бұлт арқылы кіру. IBM Quantum Experience, Google Quantum AI, AWS Braket қызметтері бар.</p>
+        <p><strong>FinOps</strong> — Cloud Financial Operations. Команда бірлесіп бұлт шығынын мониторинглейді, оңтайландырады. FinOps Foundation сертификаттары бар.</p>
+        <p><strong>Green Cloud</strong>: Microsoft 2030-ға дейін carbon negative болуды, Google 2030-ға дейін 24/7 таза энергия пайдалануды мақсат еткен.</p>
+      `,
+      keyTerms: ['Edge Computing', 'Quantum Cloud', 'FinOps', 'Green Cloud', 'Confidential Computing', 'ZTNA']
+    }
+  }
+];
+
+const seminars = [
+  { id:'s1', num:'01', icon:'💻', group: 'Негіздер',
+    title: 'AWS Free Tier тіркелу және алғашқы конфигурация',
+    desc: 'AWS тіркелу, IAM пайдаланушы жасау, Billing Alert орнату.',
+    duration: '1 сағ', tasks: ['AWS аккаунт ашу', 'Root пайдаланушыдан IAM User жасау', 'Billing Alert ($5) орнату', 'CLI орнату және конфигурация']
+  },
+  { id:'s2', num:'02', icon:'🖥️', group: 'Негіздер',
+    title: 'EC2 инстансын іске қосу және SSH қосылу',
+    desc: 'EC2 Launch Wizard, Key Pair жасау, Security Group, SSH арқылы қосылу.',
+    duration: '1.5 сағ', tasks: ['t2.micro Amazon Linux инстансын іске қосу', 'Key pair жасау (.pem файл)', 'SSH арқылы қосылу (Windows/Mac)', 'NGINX орнатып веб сервер ашу']
+  },
+  { id:'s3', num:'03', icon:'🪣', group: 'Сақтау',
+    title: 'S3 bucket жасау және статикалық сайт хостинг',
+    desc: 'S3 bucket, ACL, Static Website Hosting, CloudFront CDN.',
+    duration: '1.5 сағ', tasks: ['S3 bucket жасау', 'Статикалық HTML файл жүктеу', 'Website Hosting қосу', 'CloudFront Distribution жасау']
+  },
+  { id:'s4', num:'04', icon:'🐳', group: 'Контейнер',
+    title: 'Docker орнату және алғашқы контейнер',
+    desc: 'Docker Engine орнату, hello-world, nginx контейнер іске қосу, порт жіберу.',
+    duration: '2 сағ', tasks: ['Docker Desktop/Engine орнату', 'docker run hello-world', 'nginx:alpine контейнер іске қосу', 'Dockerfile жазу және image құру']
+  },
+  { id:'s5', num:'05', icon:'📄', group: 'Контейнер',
+    title: 'Dockerfile жазу — Node.js қосымшасы',
+    desc: 'Node.js Express қосымшасын Docker image-ға упаковкалау, .dockerignore, multi-stage build.',
+    duration: '2 сағ', tasks: ['Express.js қосымша жазу', 'Dockerfile жасау', 'Multi-stage build оңтайландыру', 'docker-compose.yml жасау']
+  },
+  { id:'s6', num:'06', icon:'🗄️', group: 'Сақтау',
+    title: 'Docker Compose — PostgreSQL + Node.js',
+    desc: 'docker-compose.yml арқылы мультиконтейнер қосымша: Node.js API + PostgreSQL + pgAdmin.',
+    duration: '2 сағ', tasks: ['PostgreSQL контейнер іске қосу', 'Node.js API контейнерін жазу', 'Желі (network) конфигурация', 'Volume арқылы деректерді сақтау']
+  },
+  { id:'s7', num:'07', icon:'⚙️', group: 'Kubernetes',
+    title: 'Minikube — жергілікті Kubernetes кластер',
+    desc: 'Minikube орнату, kubectl командалары, алғашқы Pod іске қосу.',
+    duration: '2 сағ', tasks: ['Minikube орнату', 'kubectl get nodes', 'Pod YAML жазу', 'kubectl apply/get/describe/delete']
+  },
+  { id:'s8', num:'08', icon:'📦', group: 'Kubernetes',
+    title: 'Kubernetes Deployment және Service',
+    desc: 'Deployment YAML, ReplicaSet, Rolling Update, NodePort Service жасау.',
+    duration: '2.5 сағ', tasks: ['Deployment YAML жазу', 'replicas: 3 орнату', 'Rolling update жасау', 'NodePort Service арқылы сыртқа ашу']
+  },
+  { id:'s9', num:'09', icon:'🔄', group: 'Kubernetes',
+    title: 'Kubernetes ConfigMap, Secret, PVC',
+    desc: 'Конфигурация мен құпия деректерді K8s ресурстары арқылы басқару.',
+    duration: '2 сағ', tasks: ['ConfigMap жасау', 'Secret (base64) жасау', 'PVC + PV конфигурация', 'env arқылы Pod-қа жіберу']
+  },
+  { id:'s10', num:'10', icon:'🌐', group: 'AWS',
+    title: 'AWS VPC жасау — толық желілік конфигурация',
+    desc: 'Custom VPC, Public/Private Subnet, Internet Gateway, NAT Gateway, Routing Table.',
+    duration: '2.5 сағ', tasks: ['VPC CIDR 10.0.0.0/16', 'Public subnet (10.0.1.0/24)', 'Private subnet (10.0.2.0/24)', 'NAT Gateway жасау', 'Routing Table конфигурация']
+  },
+  { id:'s11', num:'11', icon:'⚖️', group: 'AWS',
+    title: 'AWS ELB және Auto Scaling Group',
+    desc: 'Application Load Balancer, Target Group, Launch Template, Auto Scaling Policy.',
+    duration: '2.5 сағ', tasks: ['Launch Template жасау', 'ALB + Target Group', 'Auto Scaling Group (min:2, max:6)', 'CPU Scaling Policy орнату']
+  },
+  { id:'s12', num:'12', icon:'🛢️', group: 'Деректер базасы',
+    title: 'AWS RDS PostgreSQL инстансы',
+    desc: 'RDS Multi-AZ, Subnet Group, Security Group, EC2-дан қосылу, Backup.',
+    duration: '2 сағ', tasks: ['DB Subnet Group жасау', 'RDS PostgreSQL t3.micro іске қосу', 'Security Group рұқсаттары', 'EC2-дан psql арқылы қосылу']
+  },
+  { id:'s13', num:'13', icon:'⚡', group: 'Serverless',
+    title: 'AWS Lambda — алғашқы функция',
+    desc: 'Lambda function жасау, test event, CloudWatch Logs, IAM Role.',
+    duration: '1.5 сағ', tasks: ['Lambda function Python-да жасау', 'Test event іске қосу', 'CloudWatch Logs тексеру', 'Environment variable қосу']
+  },
+  { id:'s14', num:'14', icon:'🔌', group: 'Serverless',
+    title: 'API Gateway + Lambda REST API',
+    desc: 'API Gateway HTTP API, Lambda integration, CORS, Postman арқылы тест.',
+    duration: '2 сағ', tasks: ['API Gateway HTTP API жасау', 'GET /hello Lambda-ға тіркеу', 'POST /data endpoint', 'Postman арқылы тест']
+  },
+  { id:'s15', num:'15', icon:'🔒', group: 'Қауіпсіздік',
+    title: 'AWS IAM — рөлдер мен рұқсаттар',
+    desc: 'IAM User, Group, Policy, Role, STS AssumeRole, MFA орнату.',
+    duration: '2 сағ', tasks: ['IAM Group: Developers жасау', 'Custom Policy JSON жазу', 'EC2 инстансына IAM Role тіркеу', 'MFA виртуалды токен орнату']
+  },
+  { id:'s16', num:'16', icon:'🏗️', group: 'IaC',
+    title: 'Terraform — EC2 инстанс Infrastructure as Code',
+    desc: 'Terraform орнату, main.tf, variables.tf, outputs.tf, plan, apply, destroy.',
+    duration: '2.5 сағ', tasks: ['Terraform орнату', 'AWS Provider конфигурация', 'EC2 инстансы жасау', 'Variables және outputs']
+  },
+  { id:'s17', num:'17', icon:'📋', group: 'IaC',
+    title: 'Terraform — толық VPC стек',
+    desc: 'VPC, Subnet, IGW, Route Table, Security Group, EC2 — бәрі Terraform-да.',
+    duration: '3 сағ', tasks: ['VPC module жазу', 'Subnet, IGW, RT resources', 'Security Group rules', 'EC2 + user_data nginx орнату']
+  },
+  { id:'s18', num:'18', icon:'🔁', group: 'CI/CD',
+    title: 'GitHub Actions — CI/CD Pipeline',
+    desc: '.github/workflows/deploy.yml жазу, Docker build, ECR push, EC2 деплой.',
+    duration: '2.5 сағ', tasks: ['workflow.yml жасау', 'Docker build + tag + push to ECR', 'SSH арқылы EC2 деплой', 'Secrets конфигурация']
+  },
+  { id:'s19', num:'19', icon:'📊', group: 'Мониторинг',
+    title: 'Prometheus + Grafana орнату',
+    desc: 'Docker Compose арқылы Prometheus, Node Exporter, Grafana орнату, дашборд жасау.',
+    duration: '2 сағ', tasks: ['Prometheus + Node Exporter', 'Grafana орнату', 'Prometheus datasource қосу', 'Node Dashboard import']
+  },
+  { id:'s20', num:'20', icon:'📝', group: 'Мониторинг',
+    title: 'ELK Stack — логтарды жинау және талдау',
+    desc: 'Elasticsearch, Logstash, Kibana, Filebeat Docker-да іске қосу.',
+    duration: '2.5 сағ', tasks: ['ELK Docker Compose', 'Filebeat конфигурация', 'Nginx логтарын жіберу', 'Kibana Dashboard жасау']
+  },
+  { id:'s21', num:'21', icon:'🔷', group: 'Azure',
+    title: 'Azure VM жасау және NSG конфигурация',
+    desc: 'Azure Portal арқылы VM, vNet, NSG, Public IP, SSH қосылу.',
+    duration: '2 сағ', tasks: ['Resource Group жасау', 'Ubuntu 22.04 VM іске қосу', 'NSG: 22, 80 порт ашу', 'SSH арқылы қосылу + nginx']
+  },
+  { id:'s22', num:'22', icon:'📦', group: 'Azure',
+    title: 'Azure Container Instances + ACR',
+    desc: 'Azure Container Registry жасау, image push, ACI арқылы іске қосу.',
+    duration: '2 сағ', tasks: ['ACR жасау', 'docker tag + push', 'ACI Instance іске қосу', 'Public IP арқылы тест']
+  },
+  { id:'s23', num:'23', icon:'🔵', group: 'GCP',
+    title: 'GCP Compute Engine және Cloud Storage',
+    desc: 'GCP Free Tier, VM instance, gsutil, Cloud Storage bucket жасау.',
+    duration: '2 сағ', tasks: ['GCP project жасау', 'Compute Engine f1-micro іске қосу', 'gcloud CLI орнату', 'gsutil mb gs://bucket жасау']
+  },
+  { id:'s24', num:'24', icon:'🌊', group: 'GCP',
+    title: 'Google Cloud Run — контейнерсіз deploy',
+    desc: 'Cloud Run-ға Docker image деплой, автомасштаб, HTTPS endpoint.',
+    duration: '2 сағ', tasks: ['Dockerfile жасау', 'Artifact Registry-ге push', 'Cloud Run Service деплой', 'Traffic 100% маршрут']
+  },
+  { id:'s25', num:'25', icon:'🐙', group: 'Kubernetes',
+    title: 'Helm Chart жазу және орнату',
+    desc: 'Helm орнату, chart жасау, values.yaml, helm install, upgrade, rollback.',
+    duration: '2.5 сағ', tasks: ['Helm орнату', 'helm create mychart', 'values.yaml конфигурация', 'helm install + upgrade + rollback']
+  },
+  { id:'s26', num:'26', icon:'🔐', group: 'Қауіпсіздік',
+    title: 'SSL/TLS сертификат — Let\'s Encrypt + Nginx',
+    desc: 'Certbot, Let\'s Encrypt, Nginx HTTPS конфигурация, auto-renewal.',
+    duration: '2 сағ', tasks: ['Domain үшін certbot орнату', 'Nginx HTTPS конфиг', 'TLS 1.2/1.3 баптау', 'Auto-renewal cron']
+  },
+  { id:'s27', num:'27', icon:'💡', group: 'Serverless',
+    title: 'AWS Lambda + DynamoDB CRUD API',
+    desc: 'Lambda арқылы DynamoDB-ге деректер жазу, оқу, жою — serverless REST API.',
+    duration: '2.5 сағ', tasks: ['DynamoDB Table жасау', 'Lambda IAM Role (DynamoDB access)', 'POST/GET/DELETE Lambda handlers', 'API Gateway интеграция']
+  },
+  { id:'s28', num:'28', icon:'🌐', group: 'CI/CD',
+    title: 'ArgoCD — GitOps Kubernetes деплой',
+    desc: 'ArgoCD орнату, Git repo синхронизация, автоматты деплой, rollback.',
+    duration: '2.5 сағ', tasks: ['ArgoCD Minikube-ге орнату', 'Application жасау', 'Git push → авто деплой', 'Rollback жасау']
+  },
+  { id:'s29', num:'29', icon:'💰', group: 'FinOps',
+    title: 'AWS Cost Explorer және бюджет оңтайландыру',
+    desc: 'Cost Explorer, Savings Plans, Reserved Instances, Trusted Advisor.',
+    duration: '1.5 сағ', tasks: ['Cost Explorer есеп талдау', 'Budget $10/ай орнату', 'Trusted Advisor тексеру', 'Spot Instance vs On-demand баға есептеу']
+  },
+  { id:'s30', num:'30', icon:'🎓', group: 'Қорытынды',
+    title: 'Толық Cloud Native қосымша деплой',
+    desc: 'Толық микросервис архитектурасы: Kubernetes + CI/CD + Monitoring + Security.',
+    duration: '4 сағ', tasks: ['Terraform арқылы EKS кластер', 'Node.js + React микросервистер', 'GitHub Actions CI/CD pipeline', 'Prometheus + Grafana мониторинг', 'SSL + WAF қауіпсіздік']
+  }
+];
+
+const videos = [
+  { id:'v1', icon:'☁️', title:'Cloud Computing 101 — 60 минуттық кіріспе', duration:'1:02:14', topic:'Негіздер', thumb:'🌤️', youtubeId:'juTEuUD7ExI' },
+  { id:'v2', icon:'🐳', title:'Docker-ды нөлден үйрену — толық нұсқаулық', duration:'1:45:33', topic:'Docker', thumb:'🐳' },
+  { id:'v3', icon:'⚙️', title:'Kubernetes туториал — K8s архитектурасы мен командалары', duration:'2:15:08', topic:'Kubernetes', thumb:'⚙️' },
+  { id:'v4', icon:'🌍', title:'AWS EC2 + VPC — желілік конфигурация', duration:'58:41', topic:'AWS', thumb:'🌍' },
+  { id:'v5', icon:'⚡', title:'Serverless AWS Lambda — нөлден продукцияға', duration:'1:12:22', topic:'Serverless', thumb:'⚡' },
+  { id:'v6', icon:'🔒', title:'Cloud Security — IAM, шифрлау, Zero Trust', duration:'1:30:15', topic:'Қауіпсіздік', thumb:'🔒' },
+  { id:'v7', icon:'🏗️', title:'Terraform Infrastructure as Code — практикалық курс', duration:'2:05:44', topic:'IaC', thumb:'🏗️' },
+  { id:'v8', icon:'🔄', title:'GitHub Actions CI/CD — Docker деплой автоматизация', duration:'1:18:30', topic:'DevOps', thumb:'🔄' },
+  { id:'v9', icon:'📊', title:'Prometheus + Grafana мониторинг орнату', duration:'48:22', topic:'Мониторинг', thumb:'📊' },
+  { id:'v10', icon:'💠', title:'Microsoft Azure — бастаушыларға толық нұсқаулық', duration:'1:55:18', topic:'Azure', thumb:'💠' },
+  { id:'v11', icon:'🔵', title:'Google Cloud Platform — GCP негіздері', duration:'1:25:04', topic:'GCP', thumb:'🔵' },
+  { id:'v12', icon:'🐙', title:'Helm — Kubernetes пакет менеджері', duration:'52:14', topic:'Kubernetes', thumb:'🐙' },
+  { id:'v13', icon:'🌊', title:'Mikrosервис архитектурасы бұлтта', duration:'1:40:55', topic:'Архитектура', thumb:'🌊' },
+  { id:'v14', icon:'💰', title:'FinOps — бұлт шығынын оңтайландыру', duration:'38:45', topic:'FinOps', thumb:'💰' },
+  { id:'v15', icon:'🤖', title:'AI/ML бұлтта — SageMaker, Vertex AI', duration:'1:15:30', topic:'AI/ML', thumb:'🤖' },
+  { id:'v16', icon:'🔐', title:'Let\'s Encrypt + Nginx HTTPS баптау', duration:'32:18', topic:'Қауіпсіздік', thumb:'🔐' },
+  { id:'v17', icon:'📦', title:'Docker Compose — multi-container қосымша', duration:'44:09', topic:'Docker', thumb:'📦' },
+  { id:'v18', icon:'🌐', title:'AWS Route 53 + CloudFront CDN баптау', duration:'41:55', topic:'AWS', thumb:'🌐' },
+  { id:'v19', icon:'🛢️', title:'AWS RDS + Aurora деректер базасы', duration:'1:02:33', topic:'Деректер базасы', thumb:'🛢️' },
+  { id:'v20', icon:'🚀', title:'Cloud Native қосымша — нөлден продукцияға', duration:'3:24:16', topic:'Жиынтық', thumb:'🚀' },
+];
+
+const quizzes = [
+  {
+    id:'q1', title:'Тест 1 — Cloud Computing Негіздері',
+    icon:'☁️', count:10, time:'10 мин', tag:'Бастауыш',
+    questions: [
+      { q:'NIST анықтамасы бойынша бұлттық есептеулердің қанша негізгі қасиеті бар?',
+        opts:['3','4','5','6'], ans:2 },
+      { q:'IaaS моделінің мысалы қайсысы?',
+        opts:['Google Docs','Salesforce','AWS EC2','Heroku'], ans:2 },
+      { q:'Pay-as-you-go тәсілі не дегенді білдіреді?',
+        opts:['Алдын ала төлем','Пайдаланған мөлшерде төлеу','Жылдық жазылым','Тегін қызмет'], ans:1 },
+      { q:'Multi-tenancy дегеніміз не?',
+        opts:['Бір клиент жеке сервер','Бірнеше клиент ресурс бөліседі','Тек жеке бұлт','Офлайн режим'], ans:1 },
+      { q:'Public Cloud артықшылықтарына не жатады?',
+        opts:['Жоғары бастапқы шығын','Икемсіз масштаб','Жылдам орналастыру','Толық деректер бақылауы'], ans:2 },
+      { q:'CapEx дегеніміз не?',
+        opts:['Оперативтік шығын','Капиталдық шығын','Бұлттық шығын','Желілік шығын'], ans:1 },
+      { q:'On-demand self-service дегеніміз?',
+        opts:['Тек провайдер арқылы ресурс','Пайдаланушы өздігінен ресурс бөледі','Тек телефон арқылы','Тек кеңсе сағаттарында'], ans:1 },
+      { q:'Elasticity бұлтта не дегенді білдіреді?',
+        opts:['Физикалық сервер қосу','Ресурстарды автоматты масштабтау','Деректерді жою','Желіні өшіру'], ans:1 },
+      { q:'SaaS моделінің мысалы?',
+        opts:['AWS EC2','Azure VM','Gmail','Docker'], ans:2 },
+      { q:'Бұлттық провайдер бен клиент арасындағы қауіпсіздік бөлінуі қалай аталады?',
+        opts:['IAM Policy','Shared Responsibility Model','Zero Trust','VPC'], ans:1 },
+    ]
+  },
+  {
+    id:'q2', title:'Тест 2 — Docker және Контейнеризация',
+    icon:'🐳', count:10, time:'12 мин', tag:'Орташа',
+    questions: [
+      { q:'Docker Image мен Container айырмашылығы?',
+        opts:['Айырмашылық жоқ','Image — шаблон, Container — жұмыс үстіндегі нұсқа','Container — шаблон, Image — нұсқа','Image тезірек жұмыс істейді'], ans:1 },
+      { q:'Dockerfile-дегі FROM нұсқауы не үшін?',
+        opts:['Файлды көшіру','Базалық Image анықтау','Порт ашу','Команда іске қосу'], ans:1 },
+      { q:'docker-compose up командасы не жасайды?',
+        opts:['Бір контейнер іске қосады','Барлық сервистерді іске қосады','Образды жасайды','Контейнерді жояды'], ans:1 },
+      { q:'Docker Volume не үшін пайдаланылады?',
+        opts:['CPU жылдамдату','Деректерді тұрақты сақтау','Желі шифрлауы','Image жасау'], ans:1 },
+      { q:'.dockerignore файлы не үшін?',
+        opts:['Контейнерді тоқтату','Build кезінде файлдарды алып тастау','Желі конфигурация','Лог жасырту'], ans:1 },
+      { q:'Docker Hub дегеніміз?',
+        opts:['Жергілікті реестр','Ашық контейнер Image тізілімі','CI/CD жүйесі','Kubernetes кластері'], ans:1 },
+      { q:'Multi-stage build артықшылығы?',
+        opts:['Жылдамырақ желі','Кішірек финалды Image','Ауырырақ Image','Аз қауіпсіздік'], ans:1 },
+      { q:'docker ps командасы не көрсетеді?',
+        opts:['Барлық Images','Іске қосылған контейнерлер','Volume тізімі','Network тізімі'], ans:1 },
+      { q:'EXPOSE нұсқауы не жасайды?',
+        opts:['Порт сыртқа ашады','Документация мақсатында порт мәлімдейді','Файл жүктейді','Процесс тоқтатады'], ans:1 },
+      { q:'Docker bridge network дегеніміз?',
+        opts:['Хост желісі','Контейнерлер арасындағы оқшауланған желі','Интернет желісі','VPN желісі'], ans:1 },
+    ]
+  },
+  {
+    id:'q3', title:'Тест 3 — Kubernetes',
+    icon:'⚙️', count:10, time:'15 мин', tag:'Жоғары',
+    questions: [
+      { q:'Kubernetes-тегі ең кіші орналастыру бірлігі?',
+        opts:['Container','Pod','Node','Cluster'], ans:1 },
+      { q:'etcd не үшін пайдаланылады?',
+        opts:['Pod іске қосу','Кластер күйін сақтау','Load Balancing','Контейнер реестрі'], ans:1 },
+      { q:'kubectl apply -f deployment.yaml командасы не жасайды?',
+        opts:['Файлды жояды','YAML сипатталған ресурсты жасайды/жаңартады','Кластерді тоқтатады','Node қосады'], ans:1 },
+      { q:'NodePort Service-тің порт ауқымы?',
+        opts:['1-1024','8000-9000','30000-32767','1024-8080'], ans:2 },
+      { q:'Deployment-тің Rolling Update не қамтамасыз етеді?',
+        opts:['Бір уақытта барлық Pod тоқтатылады','Нөл кідіріспен жаңарту (Zero Downtime)','Мәліметтер жоғалады','Кластер жойылады'], ans:1 },
+      { q:'ConfigMap не үшін?',
+        opts:['Аппарат конфигурация','Конфигурация деректерін Pod-тан бөлу','Желі конфигурация','Node баптау'], ans:1 },
+      { q:'HPA (Horizontal Pod Autoscaler) негізінде не пайдаланады?',
+        opts:['Диск кеңістігі','CPU/Memory метрикасы','Желі жылдамдығы','Лог файл мөлшері'], ans:1 },
+      { q:'Helm дегеніміз не?',
+        opts:['K8s Network Plugin','K8s Package Manager','Container Runtime','Storage Driver'], ans:1 },
+      { q:'Kubernetes Namespace не үшін пайдаланылады?',
+        opts:['Аппарат оқшаулауы','Ресурстарды логикалық топтастыру','Шифрлау','Backup жасау'], ans:1 },
+      { q:'kubectl rollout undo deployment/myapp командасы не жасайды?',
+        opts:['Деплойды жояды','Алдыңғы нұсқаға қайтарады','Жаңа нұсқа іске қосады','Кластерді тазалайды'], ans:1 },
+    ]
+  },
+  {
+    id:'q4', title:'Тест 4 — AWS Қызметтері',
+    icon:'🌍', count:10, time:'12 мин', tag:'Орташа',
+    questions: [
+      { q:'AWS Region дегеніміз не?',
+        opts:['Бір дата-орталық','Географиялық орналасқан орындар жинағы','Бір сервер','VPC синонимі'], ans:1 },
+      { q:'S3 класының ең арзан сақтау деңгейі?',
+        opts:['S3 Standard','S3 Intelligent-Tiering','S3 Glacier Deep Archive','S3 One Zone-IA'], ans:2 },
+      { q:'EC2 Auto Scaling Group не жасайды?',
+        opts:['Деректер базасын масштабтайды','Сұранысқа байланысты EC2 санын реттейді','Lambda функция жасайды','VPC жасайды'], ans:1 },
+      { q:'AWS IAM Role мен User айырмашылығы?',
+        opts:['Айырмашылық жоқ','Role — сервистерге, User — адамдарға арналған','Role тегін, User ақылы','User тек S3 үшін'], ans:1 },
+      { q:'CloudFront дегеніміз не?',
+        opts:['Деректер базасы','CDN (Content Delivery Network)','VPN қызметі','Мониторинг жүйесі'], ans:1 },
+      { q:'AWS Spot Instance не?',
+        opts:['Резервтелген инстанс','Тоқтатылатын, арзан инстанс','Premium инстанс','GPU инстанс'], ans:1 },
+      { q:'Route 53 дегеніміз не?',
+        opts:['EC2 инстанс','Объект сақтау','DNS веб-қызметі','Мониторинг'], ans:2 },
+      { q:'AWS Shared Responsibility моделінде клиент жауапты нәрсе?',
+        opts:['Физикалық сервер қауіпсіздігі','Деректер шифрлауы','Желі жабдығы','Дата-орталық физикалық қауіпсіздігі'], ans:1 },
+      { q:'EBS (Elastic Block Store) не үшін?',
+        opts:['Объектілік сақтау','EC2 үшін блоктық дискілер','Архив сақтау','Деректер базасы'], ans:1 },
+      { q:'AWS Lambda максимал орындалу уақыты?',
+        opts:['5 мин','15 мин','30 мин','60 мин'], ans:1 },
+    ]
+  },
+  {
+    id:'q5', title:'Тест 5 — Бұлттық Қауіпсіздік',
+    icon:'🔒', count:10, time:'12 мин', tag:'Орташа',
+    questions: [
+      { q:'Zero Trust Architecture негізгі принципі?',
+        opts:['Корпоративтік желіге сеніңіз','Ешкімге/ешнәрсеге сенбе, үнемі тексер','Firewall жеткілікті','VPN барлық мәселені шешеді'], ans:1 },
+      { q:'IAM-дегі Principle of Least Privilege дегеніміз?',
+        opts:['Ең жоғары рұқсат беру','Тек қажетті рұқсатты беру','Барлық рұқсатты жою','Admin рұқсатты берме'], ans:1 },
+      { q:'Encryption at-rest дегеніміз?',
+        opts:['Берілу кезіндегі шифрлау','Сақталған деректерді шифрлау','RAM-дегі шифрлау','Желілік шифрлау'], ans:1 },
+      { q:'DDOS шабуылдан қорғауда AWS-та не пайдаланылады?',
+        opts:['IAM Policy','AWS Shield','CloudTrail','Config Rules'], ans:1 },
+      { q:'MFA (Multi-Factor Authentication) не береді?',
+        opts:['Бір факторлы кіру','Қосымша қауіпсіздік деңгейі','Жылдамырақ кіру','Парольді жоюды'], ans:1 },
+      { q:'VPC Security Group қалай жұмыс істейді?',
+        opts:['Деректерді шифрлайды','Инстанс деңгейіндегі виртуалды firewall','Ажыратым тізімі (blacklist ғана)','Тек кіру трафигін блоктайды'], ans:1 },
+      { q:'AWS CloudTrail не жасайды?',
+        opts:['EC2 іске қосады','API шақырулары мен пайдаланушы әрекеттерін журналдайды','S3 backup жасайды','Lambda іске қосады'], ans:1 },
+      { q:'SOC 2 сертификаты ненің куәсі?',
+        opts:['Физикалық қауіпсіздік','Деректер қауіпсіздігі, конфиденциалдылық стандарттарға сәйкестік','Желілік жылдамдық','Энергия тиімділігі'], ans:1 },
+      { q:'TLS (Transport Layer Security) не үшін?',
+        opts:['Деректерді сақтау шифрлауы','Деректер берілу кезіндегі шифрлау','IAM аутентификация','DNS шифрлау'], ans:1 },
+      { q:'RBAC (Role-Based Access Control) дегеніміз?',
+        opts:['IP негізінде рұқсат','Рөл негізінде рұқсатты басқару','Уақыт негізінде рұқсат','Тек read-only рұқсат'], ans:1 },
+    ]
+  },
+  {
+    id:'q6', title:'Тест 6 — DevOps және CI/CD',
+    icon:'🔄', count:10, time:'12 мин', tag:'Орташа',
+    questions: [
+      { q:'CI/CD-дегі CD-нің екі мағынасы?',
+        opts:['Continuous Docker / Continuous Delivery','Continuous Delivery / Continuous Deployment','Code Delivery / Code Deployment','Container Delivery / Container Deployment'], ans:1 },
+      { q:'Infrastructure as Code (IaC) артықшылығы?',
+        opts:['Тек командалық жолды пайдалану','Инфрақұрылымды код ретінде версиялау және автоматтандыру','Бұлт провайдерін ауыстыру','Физикалық сервер жою'], ans:1 },
+      { q:'Terraform plan командасы не жасайды?',
+        opts:['Ресурстарды жасайды','Ресурстарды жояды','Орындалатын өзгерістерді алдын ала көрсетеді','State файлын тазалайды'], ans:2 },
+      { q:'Blue-Green Deployment артықшылығы?',
+        opts:['Арзанырақ','Нөл кідіріспен жаңарту және жылдам rollback','Күрделірек архитектура','Жай жаңарту'], ans:1 },
+      { q:'Canary Release дегеніміз?',
+        opts:['Барлық трафикті жаңаруға жіберу','Аз трафикті жаңа нұсқаға, қалғанын ескіге бағыттау','Барлық нұсқаларды жою','Тек тест ортасына деплой'], ans:1 },
+      { q:'GitOps принципі дегеніміз?',
+        opts:['Git арқылы файл сақтау','Git репозитарий — бүкіл жүйенің анықтамалық шыны','Тек Git commit','PR merge жасамау'], ans:1 },
+      { q:'ArgoCD не жасайды?',
+        opts:['Docker image жасайды','Git-тен K8s кластерін синхрондайды','Код тексереді','Сервер мониторинг жасайды'], ans:1 },
+      { q:'Feature Flag не үшін?',
+        opts:['Код тарихы','Кодты орналастырмай мүмкіндіктерді қосу/өшіру','Сервер іске қосу','Деплой тоқтату'], ans:1 },
+      { q:'DORA Metrics-тегі MTTR дегеніміз?',
+        opts:['Mean Time to Release','Mean Time to Recovery','Maximum Test Run Rate','Minimum Traffic Rate'], ans:1 },
+      { q:'Docker Registry не үшін?',
+        opts:['Контейнерлерді іске қосу','Docker image сақтау мен бөлісу','Kubernetes кластері','CI/CD жүйесі'], ans:1 },
+    ]
+  },
+];
+
+const practicalTasks = [
+  {
+    title: '1-бөлім: Бұлттық инфрақұрылым негіздері',
+    tasks: [
+      { num:'1', title:'Cloud сервис моделін анықтаңыз',
+        desc:'Берілген сценарийлер үшін IaaS, PaaS немесе SaaS моделін таңдаңыз және таңдауыңызды негіздеңіз: (а) Шағын стартап жылдам мобильді қосымша іске қосуы керек, (б) Банк өз деректер базасын бақылауда ұстағысы келеді, (в) 500 қызметкерлі компания email жүйесін орнатуы керек.' },
+      { num:'2', title:'Жеке/Жалпы/Гибридті бұлт шешімін ұсыныңыз',
+        desc:'Мемлекеттік денсаулық сақтау ұйымы үшін бұлт стратегиясын жасаңыз. Ескерту: деректер конфиденциалды, сондықтан заңды талаптарды ескеріңіз. Гибридті шешім архитектурасын схема ретінде сипаттаңыз.' },
+      { num:'3', title:'Виртуалды машина конфигурация есебі',
+        desc:'Бір физикалық серверде (32 CPU ядросы, 128 GB RAM, 2 TB дискі) қанша VM орналастыруға болатынын есептеңіз. Overcommit коэффициентін ескеріңіз. Нәтижені кесте түрінде көрсетіңіз.' },
+    ]
+  },
+  {
+    title: '2-бөлім: Docker практикалық тапсырмалар',
+    tasks: [
+      { num:'4', title:'Flask қосымшасын Docker-ға упаковкалаңыз',
+        desc:'Python Flask "Hello Cloud!" қосымшасы үшін оңтайланған Dockerfile жасаңыз. Multi-stage build пайдаланыңыз. Финалды image мөлшері 100 МБ-тан аспауы керек. Docker Hub-қа push жасаңыз.' },
+      { num:'5', title:'Docker Compose микросервис архитектурасы',
+        desc:'docker-compose.yml жасаңыз: React фронтенд (80 порт), Express.js API (3000 порт), MongoDB (27017 порт), Redis кэш (6379 порт). Барлық сервистер бірге іске қосылуы керек.' },
+      { num:'6', title:'Docker Image қауіпсіздік тексеруі',
+        desc:'Берілген Dockerfile-де қауіпсіздік мәселелерін тауып, түзетіңіз: root пайдаланушы ретінде іске қосу, артық рұқсаттар, ескі base image. Trivy немесе Snyk пайдаланыңыз.' },
+    ]
+  },
+  {
+    title: '3-бөлім: Kubernetes тапсырмалары',
+    tasks: [
+      { num:'7', title:'Kubernetes Deployment YAML жазыңыз',
+        desc:'nginx:1.25-alpine image-і үшін Deployment YAML жасаңыз: 3 replica, resource limits (CPU: 100m, Memory: 128Mi), liveness/readiness probe, rolling update стратегиясы.' },
+      { num:'8', title:'Kubernetes Helm Chart жасаңыз',
+        desc:'Node.js қосымшасы үшін Helm chart жасаңыз. values.yaml арқылы: image tag, replica саны, ingress hostname конфигурация. Staging және production values файлдарын дайындаңыз.' },
+      { num:'9', title:'K8s HPA конфигурациясы',
+        desc:'CPU пайдалануы 70%-дан асқанда 2-ден 10 Pod-қа дейін автоматты масштабталатын HPA жасаңыз. Metrics Server орнатыңыз. Apache Bench арқылы жүктеме беріп, масштабталуды тексеріңіз.' },
+    ]
+  },
+  {
+    title: '4-бөлім: AWS Cloud тапсырмалары',
+    tasks: [
+      { num:'10', title:'AWS 3-tier архитектура Terraform-да',
+        desc:'Terraform арқылы классикалық 3 деңгейлі архитектура жасаңыз: Web Tier (EC2 + ALB), App Tier (EC2), Data Tier (RDS PostgreSQL). VPC, Subnet, Security Group ресурстарын қосыңыз.' },
+      { num:'11', title:'AWS Serverless API жасаңыз',
+        desc:'AWS Lambda + API Gateway + DynamoDB арқылы ToDo List REST API жасаңыз. Операциялар: GET /todos, POST /todos, PUT /todos/{id}, DELETE /todos/{id}. Postman тест нәтижелерін жіберіңіз.' },
+      { num:'12', title:'AWS Cost оңтайландыру есебі',
+        desc:'Берілген архитектураны талдаңыз және шығынды кем дегенде 40%-ке азайтатын өзгерістер ұсыныңыз. Reserved Instance, Spot, S3 Intelligent-Tiering, Auto Scaling оңтайландыруын ескеріңіз.' },
+    ]
+  },
+  {
+    title: '5-бөлім: DevOps және CI/CD',
+    tasks: [
+      { num:'13', title:'GitHub Actions Pipeline жасаңыз',
+        desc:'Node.js қосымшасы үшін толық CI/CD pipeline жасаңыз: lint → test → Docker build → ECR push → ECS deploy. Secrets пайдалануды, staging/production environment-ті қосыңыз.' },
+      { num:'14', title:'Мониторинг дашборды жасаңыз',
+        desc:'Grafana-да жеке дашборд жасаңыз: CPU, RAM, Disk I/O, Network трафигі, HTTP request rate/error rate метрикалары. Алармдарды Slack-қа жіберіңіз.' },
+      { num:'15', title:'Cloud Native қосымша — жиынтық жоба',
+        desc:'Толық микросервис қосымша жасаңыз: 3 сервис (Auth, Products, Orders), Kubernetes-те орналастырыңыз, GitHub Actions CI/CD, Prometheus мониторинг, Let\'s Encrypt SSL. README.md + схема жіберіңіз.' },
+    ]
+  },
+];
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function renderLectures() {
+  const grid = document.getElementById('lectures-grid');
+  grid.innerHTML = lectures.map(l => `
+    <div class="card reveal" onclick="showDetail('lecture', '${l.id}')" data-title="${l.title}">
+      <div class="card-num">${l.num}</div>
+      <span class="card-tag tag-lecture">Лекция</span>
+      <div class="card-title">${l.icon} ${l.title}</div>
+      <div class="card-desc">${l.desc}</div>
+      <div class="card-footer">
+        <span class="card-duration">⏱ ${l.duration} · ${l.level}</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </div>
+  `).join('');
+  triggerReveal();
+}
+
+function renderSeminars() {
+  const grid = document.getElementById('seminars-grid');
+  const tabs = document.getElementById('seminar-tabs');
+  const groups = [...new Set(seminars.map(s => s.group))];
+
+  tabs.innerHTML = `<div class="tab active" onclick="filterSeminars('Барлығы',this)">Барлығы</div>` +
+    groups.map(g => `<div class="tab" onclick="filterSeminars('${g}',this)">${g}</div>`).join('');
+
+  renderSeminarCards('Барлығы');
+}
+
+function renderSeminarCards(group) {
+  const grid = document.getElementById('seminars-grid');
+  const list = group === 'Барлығы' ? seminars : seminars.filter(s => s.group === group);
+  grid.innerHTML = list.map(s => `
+    <div class="card reveal" onclick="showDetail('seminar', '${s.id}')" data-title="${s.title}">
+      <div class="card-num">${s.num}</div>
+      <span class="card-tag tag-seminar">Семинар</span>
+      <div class="card-title">${s.icon} ${s.title}</div>
+      <div class="card-desc">${s.desc}</div>
+      <div class="card-footer">
+        <span class="card-duration">⏱ ${s.duration} · ${s.group}</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </div>
+  `).join('');
+  triggerReveal();
+}
+
+function filterSeminars(group, el) {
+  document.querySelectorAll('#seminar-tabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderSeminarCards(group);
+}
+
+function renderVideos() {
+  const grid = document.getElementById('videos-grid');
+  grid.innerHTML = videos.map(v => {
+    if (v.youtubeId) {
+      return `
+        <div class="video-item" style="cursor:default;">
+          <div class="vi-thumb" style="padding:0;height:auto;aspect-ratio:16/9;position:relative;">
+            <iframe
+              src="https://www.youtube.com/embed/${v.youtubeId}"
+              title="${v.title}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px 12px 0 0;">
+            </iframe>
+          </div>
+          <div class="vi-info">
+            <div class="vi-title">${v.title}</div>
+            <div class="vi-meta">&#9654; ${v.topic} &middot; ${v.duration}</div>
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="video-item" onclick="alert('Видео сабақ: ${v.title}\n\nБұл демо сайт. Нақты жүйеде видео платформасымен интеграция жасалады.')">
+        <div class="vi-thumb">
+          <span style="font-size:2.5rem">${v.thumb}</span>
+          <span class="vi-badge">${v.duration}</span>
+        </div>
+        <div class="vi-info">
+          <div class="vi-title">${v.title}</div>
+          <div class="vi-meta">&#9654; ${v.topic}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderTests() {
+  const grid = document.getElementById('tests-grid');
+  grid.innerHTML = quizzes.map(q => `
+    <div class="card reveal" onclick="startQuiz('${q.id}')" data-title="${q.title}">
+      <div class="card-icon">${q.icon}</div>
+      <span class="card-tag tag-test">${q.tag}</span>
+      <div class="card-title">${q.title}</div>
+      <div class="card-desc">${q.count} сұрақ · ${q.time} · Барлық сұрақ бір мәндік</div>
+      <div class="card-footer">
+        <span class="card-duration">📝 Тест тапсыру</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </div>
+  `).join('');
+  triggerReveal();
+}
+
+function renderTasks() {
+  const cont = document.getElementById('tasks-content');
+  cont.innerHTML = practicalTasks.map(section => `
+    <div style="margin-bottom: 40px;">
+      <h3 style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem; color:var(--night); margin-bottom:18px; padding:10px 16px; background:var(--sky-light); border-radius:10px; border-left:4px solid var(--sky);">
+        ${section.title}
+      </h3>
+      ${section.tasks.map(t => `
+        <div class="task-block">
+          <div class="task-num">Тапсырма ${t.num}</div>
+          <div class="task-title">${t.title}</div>
+          <div class="task-desc">${t.desc}</div>
+          <textarea class="task-input" placeholder="Жауабыңызды осында жазыңыз..."></textarea>
+          <button class="task-submit" onclick="submitTask(this)">✓ Жіберу</button>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// DETAIL VIEW
+// ============================================================
+
+function showDetail(type, id) {
+  let item, tagLabel, tagClass, backPage;
+
+  if (type === 'lecture') {
+    item = lectures.find(l => l.id === id);
+    tagLabel = '📚 Лекция'; tagClass = 'tag-lecture'; backPage = 'lectures';
+  } else {
+    item = seminars.find(s => s.id === id);
+    tagLabel = '🧪 Семинар'; tagClass = 'tag-seminar'; backPage = 'seminars';
+  }
+
+  document.getElementById('detail-tag').textContent = tagLabel;
+  document.getElementById('detail-tag').className = 'detail-type-tag ' + tagClass;
+  document.getElementById('detail-title').textContent = (item.icon || '') + ' ' + item.title;
+  document.getElementById('detail-meta').innerHTML = `
+    <span>⏱ ${item.duration || '2 сағ'}</span>
+    <span>📊 ${item.level || item.group || ''}</span>
+    <span>📅 2024 · Бұлттық технологиялар курсы</span>
+  `;
+  document.getElementById('detail-back').onclick = () => showPage(backPage);
+
+  if (type === 'lecture') {
+    renderLectureDetail(item);
+  } else {
+    renderSeminarDetail(item);
+  }
+
+  showPage('detail-page');
+}
+
+function renderLectureDetail(item) {
+  const body = document.getElementById('detail-body');
+  body.innerHTML = `
+    <div class="detail-card">
+      <h2>🎯 Кіріспе</h2>
+      <p>${item.content.intro}</p>
+    </div>
+
+    <div class="detail-card">
+      <h2>📋 Тақырып жоспары</h2>
+      <ul>${item.content.topics.map(t => `<li>${t}</li>`).join('')}</ul>
+    </div>
+
+    <div class="detail-card">
+      <h2>📖 Теориялық материал</h2>
+      ${item.content.theory}
+    </div>
+    <div class="detail-card">
+      <h2>🎬 Видео сабақ</h2>
+      ${item.id === 'l1' ? `
+      <div style="position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;margin-bottom:12px;">
+        <iframe src="https://www.youtube.com/embed/juTEuUD7ExI"
+          title="${item.title} — Видео лекция"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          style="position:absolute;top:0;left:0;width:100%;height:100%;">
+        </iframe>
+      </div>` : `
+      <div class="video-wrap" onclick="alert(\'Бейне ойнатқыш: ${item.title}\\\\n\\\\nНақты жүйеде YouTube немесе Vimeo интеграциясы болады.\')">
+        <div class="video-thumb">
+          <div class="play-btn">▶</div>
+          <div class="video-label">${item.title} — Видео лекция</div>
+        </div>
+      </div>`}
+      <p style="color:var(--muted); font-size:0.85rem;">Видео сабақта практикалық демонстрация берілген. Толық видео курс үшін видео бөліміне өтіңіз.</p>
+    </div>
+
+    <div class="detail-card">
+      <h2>🔑 Негізгі терминдер</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        ${item.content.keyTerms.map(t => `<span style="background:var(--sky-light); color:var(--sky-deep); padding:5px 12px; border-radius:20px; font-size:0.82rem; font-weight:600;">${t}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="detail-card" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe);">
+      <h2>✅ Білімді тексеру</h2>
+      <p>Осы лекцияны аяқтағаннан кейін тест тапсырыңыз!</p>
+      <button class="btn-primary" style="margin-top:12px;" onclick="showPage('tests')">📝 Тест тапсыру →</button>
+    </div>
+  `;
+}
+
+function renderSeminarDetail(item) {
+  const body = document.getElementById('detail-body');
+  body.innerHTML = `
+    <div class="detail-card">
+      <h2>🎯 Мақсат</h2>
+      <p>${item.desc}</p>
+    </div>
+
+    <div class="detail-card">
+      <h2>🎬 Нұсқаулық видео</h2>
+      <div class="video-wrap" onclick="alert('Семинар видео: ${item.title}')">
+        <div class="video-thumb">
+          <div class="play-btn">▶</div>
+          <div class="video-label">${item.title} — Нұсқаулық</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h2>📝 Орындалатын тапсырмалар</h2>
+      <ul>${item.tasks.map((t,i) => `<li><strong>${i+1}.</strong> ${t}</li>`).join('')}</ul>
+    </div>
+
+    <div class="detail-card">
+      <h2>📤 Жұмысыңызды жіберіңіз</h2>
+      <textarea class="task-input" placeholder="Орындалған тапсырма сілтемесі (GitHub, скриншот немесе сипаттама)..." style="min-height:120px;"></textarea>
+      <button class="task-submit" onclick="submitTask(this)">✓ Жіберу</button>
+    </div>
+
+    <div class="detail-card" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
+      <h2>💡 Кеңестер</h2>
+      <p>Мәселелер туындаса Stack Overflow, AWS/Azure документациясы немесе курс форумына жүгініңіз. Docker/K8s мәселелері үшін <code>kubectl describe</code> және <code>docker logs</code> командаларын пайдаланыңыз.</p>
+    </div>
+  `;
+}
+
+// ============================================================
+// QUIZ
+// ============================================================
+
+let currentQuiz = null;
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function startQuiz(id) {
+  currentQuiz = quizzes.find(q => q.id === id);
+  currentQ = 0; score = 0; answered = false;
+  document.getElementById('quiz-title').textContent = currentQuiz.title;
+  document.getElementById('quiz-back').onclick = () => showPage('tests');
+  renderQuestion();
+  showPage('quiz-page');
+}
+
+function renderQuestion() {
+  const cont = document.getElementById('quiz-container');
+  if (currentQ >= currentQuiz.questions.length) {
+    renderQuizResult(); return;
+  }
+  const q = currentQuiz.questions[currentQ];
+  const letters = ['A','B','C','D'];
+  answered = false;
+  cont.innerHTML = `
+    <div class="quiz-progress">
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--muted);">
+        <span>Сұрақ ${currentQ+1} / ${currentQuiz.questions.length}</span>
+        <span>✅ ${score} дұрыс</span>
+      </div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${((currentQ)/currentQuiz.questions.length)*100}%"></div></div>
+    </div>
+    <div class="quiz-q">${currentQ+1}. ${q.q}</div>
+    <div class="quiz-options">
+      ${q.opts.map((o,i) => `
+        <div class="quiz-opt" onclick="selectAnswer(${i},${q.ans})">
+          <span class="quiz-opt-letter">${letters[i]}</span>
+          ${o}
+        </div>
+      `).join('')}
+    </div>
+    <div class="quiz-actions" id="quiz-actions" style="display:none;">
+      <button class="btn-primary" onclick="nextQuestion()">
+        ${currentQ+1 < currentQuiz.questions.length ? 'Келесі →' : 'Нәтиже →'}
+      </button>
+    </div>
+  `;
+}
+
+function selectAnswer(i, correct) {
+  if (answered) return;
+  answered = true;
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts[correct].classList.add('correct');
+  if (i === correct) { score++; } else { opts[i].classList.add('wrong'); }
+  document.getElementById('quiz-actions').style.display = 'flex';
+}
+
+function nextQuestion() {
+  currentQ++;
+  renderQuestion();
+}
+
+function renderQuizResult() {
+  const total = currentQuiz.questions.length;
+  const pct = Math.round((score/total)*100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '👍' : '📚';
+  const msg = pct >= 80 ? 'Керемет нәтиже! Тамаша жұмыс!' : pct >= 60 ? 'Жақсы нәтиже! Материалды қайталаңыз.' : 'Материалды қайта оқып, тест қайта тапсырыңыз.';
+  document.getElementById('quiz-container').innerHTML = `
+    <div class="quiz-result">
+      <div style="font-size:3rem;margin-bottom:12px;">${emoji}</div>
+      <div class="quiz-score">${score}/${total}</div>
+      <div style="font-size:1.5rem;font-weight:700;color:var(--sky);margin-bottom:8px;">${pct}%</div>
+      <p>${msg}</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="startQuiz('${currentQuiz.id}')">🔄 Қайта тапсыру</button>
+        <button class="btn-outline" style="color:var(--text);border-color:var(--border);" onclick="showPage('tests')">← Тесттерге оралу</button>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  if (id === 'lectures') renderLectures();
+  else if (id === 'seminars') renderSeminars();
+  else if (id === 'videos') renderVideos();
+  else if (id === 'tests') renderTests();
+  else if (id === 'tasks') renderTasks();
+}
+
+function filterCards(gridId, query) {
+  const grid = document.getElementById(gridId);
+  const cards = grid.querySelectorAll('.card');
+  const q = query.toLowerCase();
+  cards.forEach(c => {
+    const title = (c.dataset.title || '').toLowerCase();
+    c.style.display = title.includes(q) ? '' : 'none';
+  });
+}
+
+function submitTask(btn) {
+  const ta = btn.previousElementSibling;
+  if (!ta.value.trim()) { ta.style.borderColor = '#ef4444'; setTimeout(() => ta.style.borderColor = '', 2000); return; }
+  btn.textContent = '✅ Жіберілді!';
+  btn.style.background = '#22c55e';
+  btn.disabled = true;
+  ta.disabled = true;
+}
+
+function triggerReveal() {
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach((el,i) => {
+      setTimeout(() => el.classList.add('revealed'), i * 60);
+    });
+  }, 50);
+}
+
+
+
+// ======= AUTH =======
+const _UK = 'btt_users_v3';
+const _SK = 'btt_sess_v3';
+
+function _getUsers() { try { return JSON.parse(localStorage.getItem(_UK)||'{}'); } catch(e){ return {}; } }
+function _saveUsers(u) { localStorage.setItem(_UK, JSON.stringify(u)); }
+function _getSess() { return localStorage.getItem(_SK); }
+function _setSess(e) { localStorage.setItem(_SK, e); }
+function _clearSess() { localStorage.removeItem(_SK); }
+
+function switchTab(t) {
+  document.getElementById('form-login').classList.toggle('active', t==='login');
+  document.getElementById('form-reg').classList.toggle('active', t==='reg');
+  document.getElementById('tab-login').classList.toggle('active', t==='login');
+  document.getElementById('tab-reg').classList.toggle('active', t==='reg');
+  document.getElementById('li-msg').className='af-msg';
+  document.getElementById('rg-msg').className='af-msg';
+}
+
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = 'af-msg ' + type;
+  el.innerHTML = msg;
+}
+function clearMsg(id) {
+  const el = document.getElementById(id);
+  if(el) el.className = 'af-msg';
+}
+
+function checkStrength() {
+  const p = document.getElementById('rg-pass').value;
+  const bars = [document.getElementById('sb1'),document.getElementById('sb2'),document.getElementById('sb3'),document.getElementById('sb4')];
+  let score = 0;
+  if(p.length>=6) score++;
+  if(p.length>=10) score++;
+  if(/[A-Z]/.test(p)||/[0-9]/.test(p)) score++;
+  if(/[^A-Za-z0-9]/.test(p)) score++;
+  const colors = ['#ef4444','#f97316','#eab308','#22c55e'];
+  bars.forEach((b,i) => { b.style.background = i < score ? colors[score-1] : 'rgba(255,255,255,0.1)'; });
+}
+
+function doLogin() {
+  const email = (document.getElementById('li-email').value||'').trim().toLowerCase();
+  const pass  = (document.getElementById('li-pass').value||'');
+  if(!email||!pass){ showMsg('li-msg','❌ Барлық өрістерді толтырыңыз','err'); return; }
+  const users = _getUsers();
+  if(!users[email]){ showMsg('li-msg','❌ Бұл email тіркелмеген. Алдымен тіркеліңіз.','err'); return; }
+  if(users[email].pass !== btoa(unescape(encodeURIComponent(pass)))){ showMsg('li-msg','❌ Құпия сөз дұрыс емес','err'); return; }
+  showMsg('li-msg','✅ Сәтті кірдіңіз! Жүктелуде...','ok');
+  _setSess(email);
+  setTimeout(()=>{ enterCourse(users[email].name); }, 700);
+}
+
+function doRegister() {
+  const fname = (document.getElementById('rg-fname').value||'').trim();
+  const lname = (document.getElementById('rg-lname').value||'').trim();
+  const email = (document.getElementById('rg-email').value||'').trim().toLowerCase();
+  const pass  = (document.getElementById('rg-pass').value||'');
+  const pass2 = (document.getElementById('rg-pass2').value||'');
+  const name  = (fname+' '+lname).trim();
+
+  if(!fname||!lname||!email||!pass||!pass2){ showMsg('rg-msg','❌ Барлық өрістерді толтырыңыз','err'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showMsg('rg-msg','❌ Email форматы дұрыс емес','err'); return; }
+  if(pass.length<6){ showMsg('rg-msg','❌ Құпия сөз кем дегенде 6 таңба болуы керек','err'); return; }
+  if(pass!==pass2){ showMsg('rg-msg','❌ Құпия сөздер сәйкес келмейді','err'); return; }
+
+  const users = _getUsers();
+  if(users[email]){ showMsg('rg-msg','❌ Бұл email бұрын тіркелген','err'); return; }
+
+  users[email] = { name, pass: btoa(unescape(encodeURIComponent(pass))), date: new Date().toLocaleDateString('kk-KZ') };
+  _saveUsers(users);
+  _setSess(email);
+  showMsg('rg-msg','✅ Тіркелу сәтті! Курсқа кіруде...','ok');
+  setTimeout(()=>{ enterCourse(name); }, 800);
+}
+
+function enterCourse(name) {
+  const ov = document.getElementById('auth-overlay');
+  if(ov){ ov.style.opacity='0'; ov.style.transition='opacity 0.4s'; setTimeout(()=>ov.classList.add('hidden'),400); }
+  const sb = document.getElementById('nav-start-btn'); if(sb) sb.style.display='none';
+  const lu = document.getElementById('nav-logged-user'); if(lu) lu.style.display='flex';
+  const un = document.getElementById('nav-username'); if(un) un.textContent = name.split(' ')[0];
+  const av = document.getElementById('nav-avatar'); if(av) av.textContent = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  triggerReveal();
+}
+
+function doLogout() {
+  if(!confirm('Шығасыз ба?')) return;
+  _clearSess(); location.reload();
+}
+
+window.addEventListener('load', function() {
+  const email = _getSess();
+  if(email) {
+    const users = _getUsers();
+    if(users[email]) { enterCourse(users[email].name); return; }
+    _clearSess();
+  }
+  const ov = document.getElementById('auth-overlay');
+  if(ov) ov.classList.remove('hidden');
+});
+
+
+
+// Init
+triggerReveal();
+</script>
+
+<!-- ===== AI CHAT WIDGET ===== -->
+<button id="ai-chat-btn" onclick="toggleAiChat()" title="AI Көмекші">🤖</button>
+
+<div id="ai-chat-box">
+  <div class="ai-chat-header">
+    <div class="ai-chat-header-icon">🤖</div>
+    <div class="ai-chat-header-text">
+      <div class="ai-chat-header-title">AI Көмекші</div>
+      <div class="ai-chat-header-sub">Бұлттық технологиялар бойынша сұрақ қойыңыз</div>
+    </div>
+    <button class="ai-chat-close" onclick="toggleAiChat()">✕</button>
+  </div>
+  <div class="ai-chat-messages" id="ai-chat-messages">
+    <div class="ai-msg bot">Сәлем! 👋 Мен бұлттық технологиялар курсы бойынша сұрақтарыңызға жауап беремін. Не білгіңіз келеді?</div>
+  </div>
+  <div class="ai-chat-input-row">
+    <input id="ai-chat-input" type="text" placeholder="Сұрағыңызды жазыңыз..." onkeydown="if(event.key==='Enter') sendAiMessage()" maxlength="300">
+    <button id="ai-chat-send" onclick="sendAiMessage()">➤</button>
+  </div>
+</div>
+
+<script>
+function toggleAiChat() {
+  const box = document.getElementById('ai-chat-box');
+  box.classList.toggle('open');
+  if (box.classList.contains('open')) {
+    setTimeout(() => document.getElementById('ai-chat-input').focus(), 100);
+  }
+}
+
+// ── Курс білім қоры ──────────────────────────────────────────────
+const courseKB = [
+  { keys:['cloud computing','бұлттық есептеу','бұлт дегеніміз','cloud деген'],
+    answer:'☁️ <strong>Cloud Computing (Бұлттық есептеу)</strong> — интернет арқылы серверлер, деректер қоймасы, дерекқорлар, желі, бағдарламалық жасақтама сияқты IT-ресурстарды «талап бойынша» ұсыну технологиясы.<br><br>NIST анықтамасына сәйкес 5 негізгі қасиеті бар:<br>1️⃣ On-demand self-service — ресурстарды өздігінен бөлу<br>2️⃣ Broad network access — кез келген желі арқылы қол жетімділік<br>3️⃣ Resource pooling — ресурстарды ортақ пайдалану<br>4️⃣ Rapid elasticity — жылдам масштабтау<br>5️⃣ Measured service — пайдаланған мөлшерде төлеу' },
+
+  { keys:['iaas','paas','saas','модель','қызмет моделі'],
+    answer:'📦 <strong>Бұлт қызмет модельдері:</strong><br><br>🖥️ <strong>IaaS</strong> (Infrastructure as a Service) — виртуалды серверлер, желі, диск. Мысалы: AWS EC2, Azure VM, Google Compute Engine.<br><br>⚙️ <strong>PaaS</strong> (Platform as a Service) — даму платформасы, дерекқор, runtime. Мысалы: Heroku, Google App Engine, Azure App Service.<br><br>📧 <strong>SaaS</strong> (Software as a Service) — дайын бағдарлама. Мысалы: Gmail, Salesforce, Microsoft 365.' },
+
+  { keys:['aws','amazon web services'],
+    answer:'🌍 <strong>AWS (Amazon Web Services)</strong> — әлемдегі ең ірі бұлт платформасы.<br><br>Негізгі қызметтер:<br>• <strong>EC2</strong> — виртуалды серверлер<br>• <strong>S3</strong> — объектілік деректер қоймасы<br>• <strong>Lambda</strong> — serverless функциялар<br>• <strong>RDS</strong> — басқарылатын дерекқор<br>• <strong>VPC</strong> — виртуалды жеке желі<br>• <strong>CloudFront</strong> — CDN қызметі<br>• <strong>Route 53</strong> — DNS қызметі' },
+
+  { keys:['azure','microsoft azure'],
+    answer:'💠 <strong>Microsoft Azure</strong> — Microsoft корпорациясының бұлт платформасы. AWS-тен кейінгі екінші ірі провайдер.<br><br>Негізгі қызметтер:<br>• <strong>Azure VM</strong> — виртуалды машиналар<br>• <strong>Azure Blob Storage</strong> — деректер қоймасы<br>• <strong>Azure Functions</strong> — serverless<br>• <strong>Azure Kubernetes Service (AKS)</strong> — контейнерлерді басқару<br>• <strong>Azure Active Directory</strong> — сәйкестендіру қызметі' },
+
+  { keys:['gcp','google cloud','google cloud platform'],
+    answer:'🔵 <strong>Google Cloud Platform (GCP)</strong> — Google корпорациясының бұлт платформасы.<br><br>Негізгі қызметтер:<br>• <strong>Compute Engine</strong> — виртуалды машиналар<br>• <strong>Cloud Storage</strong> — деректер қоймасы<br>• <strong>BigQuery</strong> — деректерді талдау<br>• <strong>GKE</strong> — Kubernetes қызметі<br>• <strong>Vertex AI</strong> — ML платформасы<br>• <strong>Cloud Run</strong> — serverless контейнерлер' },
+
+  { keys:['docker','контейнер','dockerfile','image'],
+    answer:'🐳 <strong>Docker</strong> — қосымшаларды контейнерлерге орау технологиясы.<br><br>Негізгі ұғымдар:<br>• <strong>Image</strong> — контейнердің үлгісі (оқуға ғана арналған)<br>• <strong>Container</strong> — іске қосылған image данасы<br>• <strong>Dockerfile</strong> — image жасауға арналған нұсқаулар файлы<br>• <strong>Docker Hub</strong> — image-лерді сақтайтын тізілім<br>• <strong>Docker Compose</strong> — бірнеше контейнерді бірге іске қосу<br><br>Пайдасы: «Менің компьютерімде жұмыс істейді» мәселесін шешеді!' },
+
+  { keys:['kubernetes','k8s','кубернетес','pod','deployment','service'],
+    answer:'⚙️ <strong>Kubernetes (K8s)</strong> — контейнерлерді автоматты басқару жүйесі.<br><br>Негізгі компоненттер:<br>• <strong>Pod</strong> — ең кіші орналастыру бірлігі (1+ контейнер)<br>• <strong>Deployment</strong> — Pod-тарды басқару және жаңарту<br>• <strong>Service</strong> — Pod-тарға желілік қол жетімділік<br>• <strong>Ingress</strong> — сыртқы трафикті бағыттау<br>• <strong>ConfigMap/Secret</strong> — конфигурация мен құпияларды сақтау<br>• <strong>Namespace</strong> — ресурстарды оқшаулау' },
+
+  { keys:['terraform','infrastructure as code','iac'],
+    answer:'🏗️ <strong>Terraform</strong> — HashiCorp компаниясының Infrastructure as Code (IaC) құралы.<br><br>Артықшылықтары:<br>• Инфрақұрылымды код ретінде жазу (HCL тілінде)<br>• AWS, Azure, GCP және 1000+ провайдерді қолдайды<br>• <strong>Plan → Apply</strong> жұмыс процесі<br>• State файлы арқылы инфрақұрылым күйін бақылау<br><br>Негізгі командалар: <code>terraform init</code>, <code>terraform plan</code>, <code>terraform apply</code>, <code>terraform destroy</code>' },
+
+  { keys:['serverless','lambda','функция','azure functions'],
+    answer:'⚡ <strong>Serverless (Серверсіз) архитектура</strong> — сервер басқармай, тек код жазасыз.<br><br>Қалай жұмыс істейді:<br>1. Функцияны жазасыз<br>2. Бұлт провайдеріне жүктейсіз<br>3. Оқиға болғанда автоматты іске қосылады<br>4. Пайдаланған уақыт үшін ғана төлейсіз<br><br>Мысалдар: <strong>AWS Lambda</strong>, <strong>Azure Functions</strong>, <strong>Google Cloud Functions</strong><br><br>Артықшылығы: Сервер басқармайсыз, автоматты масштабтау, төмен шығын.' },
+
+  { keys:['devops','ci/cd','github actions','pipeline','continuous'],
+    answer:'🔄 <strong>DevOps және CI/CD</strong><br><br><strong>CI (Continuous Integration)</strong> — кодты үнемі біріктіру және тестілеу.<br><strong>CD (Continuous Deployment)</strong> — кодты автоматты орналастыру.<br><br><strong>GitHub Actions</strong> — GitHub-тегі CI/CD платформасы:<br>• YAML файлында workflow жазылады<br>• Push, PR, schedule бойынша іске қосылады<br>• Docker build → test → deploy автоматтандырылады<br><br>Артықшылығы: Адам қателерін азайту, жылдам жеткізу.' },
+
+  { keys:['қауіпсіздік','security','iam','zero trust','шифрлау','encryption'],
+    answer:'🔒 <strong>Бұлт қауіпсіздігі</strong><br><br><strong>IAM (Identity and Access Management)</strong> — кім, нені, қашан жасай алатынын басқару.<br><br>Негізгі принциптер:<br>• <strong>Least Privilege</strong> — тек қажетті рұқсат беру<br>• <strong>Zero Trust</strong> — ешкімге сенбе, барлығын тексер<br>• <strong>MFA</strong> — екі факторлы аутентификация<br>• <strong>Encryption at rest & in transit</strong> — деректерді шифрлау<br><br><strong>Shared Responsibility Model</strong> — провайдер платформаны, клиент деректерді қорғайды.' },
+
+  { keys:['мониторинг','monitoring','prometheus','grafana','cloudwatch','логтар'],
+    answer:'📊 <strong>Бұлт мониторингі</strong><br><br><strong>Prometheus</strong> — метрикаларды жинау жүйесі (Pull model).<br><strong>Grafana</strong> — деректерді визуализациялау дашборды.<br><strong>AWS CloudWatch</strong> — AWS қызметтерін бақылау.<br><strong>Azure Monitor</strong> — Azure ресурстарын бақылау.<br><br>Не бақылайды:<br>• CPU, RAM, диск пайдаланылуы<br>• Сұраныс саны және кешігу уақыты<br>• Қате пайызы (Error rate)<br>• Алерт (ескерту) жүйесі' },
+
+  { keys:['микросервис','microservice','архитектура'],
+    answer:'🌊 <strong>Микросервис архитектурасы</strong> — үлкен қосымшаны кішкентай, тәуелсіз қызметтерге бөлу.<br><br>Монолит vs Микросервис:<br>• Монолит: барлығы бір орында → оңай, бірақ масштабтауы қиын<br>• Микросервис: бөлек → масштабтауы оңай, бірақ күрделі<br><br>Артықшылықтары:<br>✅ Тәуелсіз орналастыру<br>✅ Технологиялық еркіндік<br>✅ Оқшауланған ақаулар<br><br>Kubernetes + Docker — микросервистерді іске асырудың негізгі стегі.' },
+
+  { keys:['finops','шығын','cost','billing','оңтайландыру'],
+    answer:'💰 <strong>FinOps (Cloud Cost Optimization)</strong> — бұлт шығындарын оңтайландыру тәжірибесі.<br><br>Негізгі стратегиялар:<br>• <strong>Right-sizing</strong> — қажетті өлшемдегі ресурс таңдау<br>• <strong>Reserved Instances</strong> — алдын ала брондау (70% дейін үнемдеу)<br>• <strong>Spot Instances</strong> — артық ресурстарды арзан пайдалану<br>• <strong>Auto-scaling</strong> — жүктемеге қарай автоматты масштабтау<br>• <strong>Тегтер (Tags)</strong> — шығындарды бөлімдер бойынша бақылау' },
+
+  { keys:['helm','пакет','chart'],
+    answer:'🐙 <strong>Helm</strong> — Kubernetes үшін пакет менеджері ("Kubernetes-тің apt/npm-і").<br><br>Негізгі ұғымдар:<br>• <strong>Chart</strong> — Kubernetes ресурстарының пакеті<br>• <strong>Release</strong> — орнатылған chart данасы<br>• <strong>Repository</strong> — chart-тар қоймасы<br><br>Негізгі командалар:<br>• <code>helm install</code> — орнату<br>• <code>helm upgrade</code> — жаңарту<br>• <code>helm rollback</code> — кері қайту<br>• <code>helm uninstall</code> — жою' },
+
+  { keys:['ai','ml','machine learning','sagemaker','vertex','жасанды интеллект'],
+    answer:'🤖 <strong>AI/ML бұлтта</strong><br><br><strong>AWS SageMaker</strong> — ML модельдерін дайындау, оқыту және орналастыру платформасы.<br><strong>Google Vertex AI</strong> — Google Cloud ML платформасы.<br><strong>Azure ML</strong> — Microsoft Azure ML қызметі.<br><br>ML жұмыс процесі бұлтта:<br>1️⃣ Деректерді жинау (S3, Cloud Storage)<br>2️⃣ Модельді оқыту (GPU инстанстары)<br>3️⃣ Модельді бағалау<br>4️⃣ API ретінде орналастыру<br>5️⃣ Мониторинг' },
+
+  { keys:['vpc','желі','network','subnet','security group'],
+    answer:'🌐 <strong>VPC (Virtual Private Cloud)</strong> — бұлттағы виртуалды жеке желі.<br><br>Негізгі компоненттер:<br>• <strong>Subnet</strong> — желі ішіндегі кіші сегмент (Public/Private)<br>• <strong>Internet Gateway</strong> — интернетке шығу<br>• <strong>NAT Gateway</strong> — жеке подсетьтен интернетке шығу<br>• <strong>Security Group</strong> — виртуалды брандмауэр (Inbound/Outbound ережелері)<br>• <strong>Route Table</strong> — трафикті бағыттау кестесі' },
+
+  { keys:['s3','object storage','деректер қоймасы','storage'],
+    answer:'🗄️ <strong>AWS S3 (Simple Storage Service)</strong> — объектілік деректер қоймасы.<br><br>Сипаттамалары:<br>• Шексіз сыйымдылық<br>• 99.999999999% (11 тоғыз) сенімділік<br>• <strong>Bucket</strong> — файлдар контейнері<br>• <strong>Object</strong> — файл + метадеректер<br><br>Қолданылуы:<br>✅ Статикалық сайт хостинг<br>✅ Резервтік көшірме<br>✅ Деректер архиві<br>✅ CDN мазмұны (CloudFront-пен бірге)' },
+
+  { keys:['лекция','семинар','тест','тапсырма','курс','оқу','сабақ'],
+    answer:'📚 <strong>Курс мазмұны:</strong><br><br>• 📖 <strong>15 лекция</strong> — теориялық материал<br>• 🔬 <strong>30 семинар</strong> — практикалық жаттығулар<br>• 🎬 <strong>20 видео сабақ</strong> — бейнеформатта түсіндіру<br>• 📝 <strong>6 тест</strong> — білімді тексеру<br>• 💻 <strong>Тапсырмалар</strong> — практикалық жобалар<br><br>Навигация үшін жоғарыдағы мәзірді пайдаланыңыз.' },
+];
+
+// ── Курс тақырыбына қатысты ма? тексеру ──────────────────────────
+const courseKeywords = [
+  'cloud','бұлт','aws','azure','gcp','google cloud','docker','kubernetes','k8s',
+  'terraform','serverless','lambda','devops','ci/cd','github','pipeline',
+  'қауіпсіздік','security','iam','шифрлау','мониторинг','prometheus','grafana',
+  'cloudwatch','микросервис','microservice','finops','helm','ai','ml','machine learning',
+  'sagemaker','vertex','vpc','желі','network','s3','storage','деректер қоймасы',
+  'iaas','paas','saas','контейнер','container','pod','deployment','лекция',
+  'семинар','тест','тапсырма','курс','оқу','сабақ','видео','ec2','rds','cdn',
+  'cloudfront','route53','subnet','nat','internet gateway','devops','infrastructure',
+  'инфрақұрылым','архитектура','масштаб','elasticity','availability','region','zone',
+  'load balancer','auto scaling','billing','шығын','cost','резервтік','backup',
+  'monitoring','logging','трафик','bandwidth','latency','throughput'
+];
+
+function isCourseRelated(text) {
+  const lower = text.toLowerCase();
+  return courseKeywords.some(kw => lower.includes(kw));
+}
+
+function findAnswer(text) {
+  const lower = text.toLowerCase();
+  for (const item of courseKB) {
+    if (item.keys.some(k => lower.includes(k))) {
+      return item.answer;
+    }
+  }
+  return null;
+}
+
+// ── Хабарлама жіберу ──────────────────────────────────────────────
+function sendAiMessage() {
+  const input = document.getElementById('ai-chat-input');
+  const msgs = document.getElementById('ai-chat-messages');
+  const sendBtn = document.getElementById('ai-chat-send');
+  const text = input.value.trim();
+  if (!text) return;
+
+  msgs.innerHTML += `<div class="ai-msg user">${escapeHtml(text)}</div>`;
+  input.value = '';
+  sendBtn.disabled = true;
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Жауап беру уақытын имитациялау
+  const typingId = 'typing-' + Date.now();
+  msgs.innerHTML += `<div class="ai-msg bot typing" id="${typingId}">⏳ Ойланып жатыр...</div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+
+  setTimeout(() => {
+    const el = document.getElementById(typingId);
+    if (el) el.remove();
+
+    let reply;
+    if (!isCourseRelated(text)) {
+      reply = '🚫 Кешіріңіз, мен тек <strong>Бұлттық Технологиялар курсына</strong> қатысты сұрақтарға жауап бере аламын. 😊<br><br>Мысалы: AWS, Docker, Kubernetes, Cloud Computing, DevOps туралы сұраңыз!';
+    } else {
+      const found = findAnswer(text);
+      if (found) {
+        reply = found;
+      } else {
+        reply = '🤔 Сұрағыңыз курсқа қатысты екені белгілі, бірақ нақты жауабымда әлі бұл тақырып жоқ.<br><br>Мына тақырыптар бойынша толық жауап бере аламын:<br>☁️ Cloud Computing негіздері · IaaS/PaaS/SaaS<br>🌍 AWS · 💠 Azure · 🔵 GCP<br>🐳 Docker · ⚙️ Kubernetes · 🏗️ Terraform<br>⚡ Serverless · 🔄 DevOps/CI/CD · 🔒 Қауіпсіздік<br>📊 Мониторинг · 🌊 Микросервис · 💰 FinOps';
+      }
+    }
+
+    msgs.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
+    sendBtn.disabled = false;
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 900 + Math.random() * 600);
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
